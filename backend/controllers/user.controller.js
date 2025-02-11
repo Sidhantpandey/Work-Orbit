@@ -1,6 +1,7 @@
 import userModel from "../models/user.models.js"
 import * as userService from '../services/user.service.js'
 import {validationResult} from 'express-validator'
+import redisClient from '../services/redis.service.js'
 
 
 // This controller will first validate the things coming
@@ -44,5 +45,29 @@ export const loginController=async(req,res)=>{
         res.status(200).json({user,token});
     } catch (error) {
         res.status(400).send(error.message);
+    }
+}
+
+
+// profile controller should run only for authenticated users therefore we will create a middleware 
+export const profileController=async(req,res)=>{
+    console.log(req.user)
+    res.status(200).json({
+        user:req.user
+    });
+}
+
+export const logoutController=async(req,res)=>{
+    try {
+        const token=req.cookies.token || req.headers.authorization.split(' ')[ 1 ];
+        redisClient.set(token,'logout','EX',60*60*24);
+
+        res.status(200).json({
+            message:"Loggout out Successfully"
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send(error.message);
+
     }
 }
