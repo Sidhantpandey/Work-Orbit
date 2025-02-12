@@ -3,50 +3,53 @@ import * as userService from '../services/user.service.js'
 import {validationResult} from 'express-validator'
 import redisClient from '../services/redis.service.js'
 
-
 // This controller will first validate the things coming
 export const createUserController=async(req,res)=>{
     const errors=validationResult(req)
     if(!errors.isEmpty()){
-        return res.status(400).json({errors:error.array() });
+        return res.status(400).json({errors:errors.array() });
     }
     try {
         const user=await userService.createUser(req.body);
 
         const token=await user.generateJWT();
-        
+        // to prevent sending password to the frontend
+        delete user._doc.password;
         res.status(201).json({user,token})
     } catch (error) {
         res.status(400).send(error.message);
     }
 }
 
-export const loginController=async(req,res)=>{
-    const errors=validationResult(req)
-    if(!errors.isEmpty()){
-        return res.satatus(400).json({errors:errors.array()});
+export const loginController = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: "Validation Error", errors: errors.array() });
+        // console.log(errors.array())
     }
     try {
-        const {email,password}=req.body
-        const user=await userModel.findOne({email}).select('+password');
+        const { email, password } = req.body;
+        const user = await userModel.findOne({ email }).select("+password");
 
-        if(!user){
-            res.status(401).json({errors:"Invalid Credentials"})
+        if (!user) {
+            return res.status(401).json({ message: "Invalid Credentials" });
         }
 
-        const isMatch=await user.isValidPassword(password)
-
-        if(!isMatch){
-            res.status(401).json({errors:"Invalid Credentials"})
-
+        const isMatch = await user.isValidPassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ message: "Invalid Credentials" });
         }
 
-        const token=await user.generateJWT();
-        res.status(200).json({user,token});
+        const token = await user.generateJWT();
+        delete user._doc.password; // Remove password from response
+
+        return res.status(200).json({ message: "Login Successful!", user, token });
     } catch (error) {
-        res.status(400).send(error.message);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-}
+};
+
+
 
 
 // profile controller should run only for authenticated users therefore we will create a middleware 
