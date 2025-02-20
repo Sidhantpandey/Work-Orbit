@@ -74,3 +74,18 @@ export const logoutController=async(req,res)=>{
 
     }
 }
+
+
+export const getAllUserController=async(req,res)=>{
+    try {
+        //note that in this particular route we will not give the users who are currently logged in 
+        const loggedInUser=await userModel.findOne({email:req.user.email});
+
+        const allUsers=await userService.getAllUsers({userId:loggedInUser._id});
+        return res.status(200).json({users:allUsers});
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message:error.message});
+    }
+}

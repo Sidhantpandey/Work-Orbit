@@ -19,5 +19,7 @@ router.post('/login',
 
 router.get('/profile',authMiddleware.authUser,userController.profileController)
 router.get('/logout',authMiddleware.authUser,userController.logoutController)
+//to get all users in a database
+router.get('/all',authMiddleware.authUser,userController.getAllUserController)
 
 export default router

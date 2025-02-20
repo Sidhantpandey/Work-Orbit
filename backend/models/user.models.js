@@ -4,6 +4,14 @@ import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
   {
+    name:{
+      type: String,
+      required: true,
+      trim: true,
+      minLength: [3, "Name must be 3 characters"],
+      maxLength: [50, "Name must not be longer than 50 characters"],
+    },
+
     email: {
       type: String,
       required: true,
@@ -25,6 +33,7 @@ const userSchema = new mongoose.Schema(
 userSchema.statics.hashPassword = async function (password) {
   return await bcrypt.hash(password, 10);
 };
+
 
 userSchema.methods.isValidPassword = async function (password) {
   return await bcrypt.compare(password, this.password);

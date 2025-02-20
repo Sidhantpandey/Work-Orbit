@@ -13,13 +13,15 @@ const LoginForm = () => {
   const navigate = useNavigate();
   function submitHandler(e) {
     e.preventDefault();
-    axios.post("http://localhost:4000/users/login", {
+    axios.post("/users/login", {
         email,
         password,
       })
       .then((res) => {
         console.log(res.data);
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user)); // Store in localStorage
+
         setUser(res.data.user)
         toast.success("Login Successful!", { position: "top-right" });
         navigate("/");
@@ -36,7 +38,7 @@ const LoginForm = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
       <form
         onSubmit={submitHandler}
-        className="bg-gray-800 p-8 rounded-lg shadow-lg w-90 animate-fade-in-down"
+        className="bg-gray-800 p-8 rounded-lg shadow-lg w-96 animate-fade-in-down"
       >
         <h2 className="text-white text-2xl mb-6 text-center">Login</h2>
         <div className="mb-6">
