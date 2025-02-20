@@ -8,12 +8,11 @@ const projectSchema = new mongoose.Schema({
         trim: true,
         unique: [true, 'Project name already exists'],
     },
-
-    users:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
-    }
-},{timeStamps:true});
+    users: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
+}, { timestamps: true }); // Corrected spelling from `timeStamps` to `timestamps`
 
 const Project = mongoose.model('Project', projectSchema);
-export default Project 
+export default Project;
