@@ -1,15 +1,34 @@
-import React, { useContext, useState,useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/user.context";
 import axios from "../config/axios.js";
 import { toast } from "react-toastify";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
-  const [project,setProject]=useState([]);  
+  const [project, setProject] = useState([]);
+
+  function logout() {
+    axios
+      .get("/users/logout")
+      .then((res) => {
+        if (res.status == 200) {
+          localStorage.removeItem('token');
+
+          navigate('/login');
+          toast.success("Logged Out Successfully", { position: "top-right" });
+        } else {
+          toast.error("Not be able to Log out", { position: "top-right" });
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.error("Logging out Failed", { position: "top-right" });
+      });
+  }
 
   function createProject(e) {
     e.preventDefault();    
@@ -29,9 +48,9 @@ const Home = () => {
       });
   }
   
-  
+
   useEffect(() => {
-    if (user) { // Ensure user is logged in before making the request
+    if (user) { 
       axios.get('/projects/all')
       .then((res) => {
         setProject(res.data.projects);
@@ -43,8 +62,7 @@ const Home = () => {
     }
   }, [user]); // Dependency array includes user, so this runs when user updates
   
-  
-  
+
 
   return (
     <main className="p-4">
@@ -57,25 +75,33 @@ const Home = () => {
           <i className="ri-sticky-note-add-line ml-2"></i>
         </button>
 
-        {
-          project.map((project)=>(
-            <div key={project._id} 
-            onClick={()=>{navigate('/project',{
-              state:{project}
-            })}}
-             className="project p-4 border  border-slate-300 rounded-md cursor-pointer" >
-              <h2 className="font-semibold">{project.name}</h2>
+        <button
+          onClick={logout}
+          className="project p-4 border  border-slate-300 rounded-md"
+        >
+          Logout
+          <i className="ri-sticky-note-add-line ml-2"></i>
+        </button>
+        {project.map((project) => (
+          <div
+            key={project._id}
+            onClick={() => {
+              navigate("/project", {
+                state: { project },
+              });
+            }}
+            className="project p-4 border  border-slate-300 rounded-md cursor-pointer"
+          >
+            <h2 className="font-semibold">{project.name}</h2>
 
-              <div className="flex gap-2">
+            <div className="flex gap-2">
               <i className="ri-user-fill"></i>
-                <p>{project.users.length}  <small> Collaborators : </small></p>
-              </div>
+              <p>
+                {project.users.length} <small> Collaborators : </small>
+              </p>
             </div>
-          ))
-
-
-        }
-
+          </div>
+        ))}
       </div>
 
       {isModalOpen && (

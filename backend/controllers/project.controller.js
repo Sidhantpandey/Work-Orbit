@@ -24,6 +24,7 @@ export const createProject = async (req, res) => {
 
 export const getAllProjects = async (req, res) => {
   try {
+
     const loggedInUser = await userModel.findOne({ email: req.user.email });
 
     if (!loggedInUser) {
