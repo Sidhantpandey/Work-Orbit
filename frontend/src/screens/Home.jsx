@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user ,setUser} = useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [project, setProject] = useState([]);
@@ -17,7 +17,8 @@ const Home = () => {
       .then((res) => {
         if (res.status == 200) {
           localStorage.removeItem('token');
-
+          localStorage.removeItem('user');
+          setUser(null)
           navigate('/login');
           toast.success("Logged Out Successfully", { position: "top-right" });
         } else {
