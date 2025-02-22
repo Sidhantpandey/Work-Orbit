@@ -7,11 +7,16 @@ import Project from '../screens/Project';
 import RefreshHandler from '../RefreshHandler';
 
 const AppRoutes = () => {
-  const [authenticated, setIsAuthenticated] = useState(false);
+  const [authenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
 
   // Private Route Handler
   const PrivateRouting = ({ element }) => {
     return authenticated ? element : <Navigate to="/login" />;
+  };
+
+  // Public Route Handler (Prevent logged-in users from accessing login/register)
+  const PublicRouting = ({ element }) => {
+    return authenticated ? <Navigate to="/" /> : element;
   };
 
   return (
@@ -19,8 +24,8 @@ const AppRoutes = () => {
       <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
       <Routes>
         <Route path="/" element={<PrivateRouting element={<Home />} />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<PublicRouting element={<LoginForm />} />} />
+        <Route path="/register" element={<PublicRouting element={<Register />} />} />
         <Route path="/project" element={<PrivateRouting element={<Project />} />} />
       </Routes>
     </BrowserRouter>

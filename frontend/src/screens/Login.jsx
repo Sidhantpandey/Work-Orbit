@@ -1,39 +1,47 @@
-import React, { useState ,useContext} from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../config/axios.js";
-import {toast} from 'react-toastify'
-import {UserContext} from '../context/user.context'
+import { toast } from "react-toastify";
+import { UserContext } from "../context/user.context";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {setUser} = useContext(UserContext)
-
-
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
-  function submitHandler(e) {
+
+  async function submitHandler(e) {
     e.preventDefault();
-    axios.post("/users/login", {
+    try {
+      const res = await axios.post("/users/login", {
         email,
         password,
-      })
-      .then((res) => {
-        console.log(res.data);
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user)); // Store in localStorage
+      });
 
-        setUser(res.data.user)
+      if (res.data.token) {
+        // First set the token
+        localStorage.setItem("token", res.data.token);
+        
+        // Update axios default headers
+        axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+        
+        // Then set user data
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        setUser(res.data.user);
+
         toast.success("Login Successful!", { position: "top-right" });
         navigate("/");
-      })
-      .catch((err) => {
-        toast.error(err.response?.data?.errors || "Login Failed!", {
-          position: "top-right",
-        });
-        console.log(err);
+      } else {
+        throw new Error("No token received");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      toast.error(err.response?.data?.message || "Login Failed!", {
+        position: "top-right",
       });
+    }
   }
-  
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
       <form
