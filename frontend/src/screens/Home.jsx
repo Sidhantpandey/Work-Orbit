@@ -1,41 +1,26 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../context/user.context";
 import axios from "../config/axios.js";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import '../components/Loader/Loader.css'
 
 const Home = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, projects, fetchProjects, loading } =
+    useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
-  const [project, setProject] = useState([]);
-
-  useEffect(() => {
-    if (user) {
-      axios.get('/projects/all')
-        .then((res) => {
-          setProject(res.data.projects);
-        })
-        .catch((err) => { 
-          console.error(err);
-          if (err.response?.status === 401) {
-            navigate('/login');
-          } else {
-            toast.error("Failed to fetch projects", { position: "top-right" });
-          }
-        });
-    }
-  }, [user, navigate]);
 
   function logout() {
-    axios.get("/users/logout")
+    axios
+      .get("/users/logout")
       .then((res) => {
         if (res.status === 200) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
           setUser(null);
-          navigate('/login');
+          navigate("/login");
           toast.success("Logged Out Successfully", { position: "top-right" });
         }
       })
@@ -46,19 +31,24 @@ const Home = () => {
   }
 
   function createProject(e) {
-    e.preventDefault();    
-    axios.post("/projects/create", { name: projectName })
+    e.preventDefault();
+    axios
+      .post("/projects/create", { name: projectName })
       .then((res) => {
         if (res.status === 201) {
-          setProject([...project, res.data]);
+          fetchProjects(); // Refetch projects after creating
           setIsModalOpen(false);
           setProjectName("");
-          toast.success("Project Created Successfully!", { position: "top-right" });
+          toast.success("Project Created Successfully!", {
+            position: "top-right",
+          });
         }
       })
       .catch((err) => {
         console.error(err);
-        toast.error(err.response?.data?.message || "Project Creation Failed!", { position: "top-right" });
+        toast.error(err.response?.data?.message || "Project Creation Failed!", {
+          position: "top-right",
+        });
       });
   }
 
@@ -80,25 +70,40 @@ const Home = () => {
           Logout
           <i className="ri-sticky-note-add-line ml-2"></i>
         </button>
-        {project.map((project) => (
-          <div
-            key={project._id}
-            onClick={() => {
-              navigate("/project", {
-                state: { project },
-              });
-            }}
-            className="project p-4 border border-slate-300 rounded-md cursor-pointer"
-          >
-            <h2 className="font-semibold">{project.name}</h2>
-            <div className="flex gap-2">
-              <i className="ri-user-fill"></i>
-              <p>
-                {project.users.length} <small>Collaborators</small>
-              </p>
-            </div>
+
+        <button onClick={()=>{navigate('/update')}} className="project p-4 border border-slate-300 rounded-md">
+          Update Profile
+        </button>
+
+        {loading ? (
+          <div className="fixed inset-0 flex items-center justify-center bg-white">
+             <div className="flex items-center justify-center h-screen w-screen bg-white">
+              
+          <div className="loader"></div>
           </div>
-        ))}
+          </div>
+          
+        ) : (
+          projects.map((project) => (
+            <div
+              key={project._id}
+              onClick={() => {
+                navigate("/project", {
+                  state: { project },
+                });
+              }}
+              className="project p-4 border border-slate-300 rounded-md cursor-pointer"
+            >
+              <h2 className="font-semibold">{project.name}</h2>
+              <div className="flex gap-2">
+                <i className="ri-user-fill"></i>
+                <p>
+                  {project.users.length} <small>Collaborators</small>
+                </p>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {isModalOpen && (

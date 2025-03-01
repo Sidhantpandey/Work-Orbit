@@ -17,7 +17,7 @@ router.post(
 
 router.get("/all", authMiddleware.authUser, projectController.getAllProjects);
 //end point for getting project by id
-router.get('/get-project/:projectId',authMiddleware.authUser,projectController.getProjectById);
+router.get('/get-project/:projectId',authMiddleware.authUser,projectController.getProjectById)
 
 //creating end point for add users to project
 router.put(
@@ -34,8 +34,6 @@ router.put(
   projectController.addUserToProject
 );
 
-// route to get detail of a project 
 
-// route.get('/get-project',authMiddleware.authUser,projectController.getProjects)
 
 export default router;

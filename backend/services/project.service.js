@@ -60,7 +60,7 @@ export const addUserToProject = async ({ projectId, users ,userId }) => {
     });
 
   if(!project){
-    throw new Error("User not authorized to add users to this project");
+    throw new Error("User does not belong to this project ");
   }
   const updatedProject=await projectModel.findOneAndUpdate({
     _id:projectId
@@ -89,3 +89,4 @@ export const getProjectById = async (projectId) => {
   }).populate("users");
   return project;
 }
+
