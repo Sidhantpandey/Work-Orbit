@@ -27,7 +27,7 @@ function RefreshHandler({ setIsAuthenticated }) {
             }
         } else {
             setIsAuthenticated(false);
-            if (location.pathname !== '/login' && location.pathname !== '/register') {
+            if (location.pathname !== '/login' && location.pathname !== '/register' && location.pathname!=='/reset-password') {
                 navigate('/login');
             }
         }

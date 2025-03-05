@@ -25,7 +25,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       select: false, // This ensures the password is not returned by default in queries
+    }, 
+    resetOtp:{
+      type:String,
+      default:''
     },
+    resetOtpExpireAt:{
+      type:Number,
+      default:0
+    }
   },
   { timestamps: true }
 );

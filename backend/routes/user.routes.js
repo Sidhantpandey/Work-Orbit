@@ -22,4 +22,12 @@ router.get('/logout',authMiddleware.authUser,userController.logoutController)
 //to get all users in a database
 router.get('/all',authMiddleware.authUser,userController.getAllUserController)
 
+// send password reset OTP
+router.post('/send-otp',
+    body('email').isEmail().withMessage('Email must  be a valid Email Address'),
+    userController.sendResetOtp
+)
+
+router.post('/reset-password',userController.resetPassword)
+
 export default router

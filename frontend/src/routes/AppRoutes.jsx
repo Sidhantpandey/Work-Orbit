@@ -7,6 +7,7 @@ import Project from '../screens/Project';
 import RefreshHandler from '../RefreshHandler';
 import Link from '../screens/Link'
 import UpdateProfile from "../screens/UpdateProfile"
+import ResetPassword from "../screens/ResetPassword"
 
 const AppRoutes = () => {
   const [authenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
@@ -28,6 +29,7 @@ const AppRoutes = () => {
         <Route path="/" element={<PrivateRouting element={<Home />} />} />
         <Route path="/login" element={<PublicRouting element={<LoginForm />} />} />
         <Route path="/register" element={<PublicRouting element={<Register />} />} />
+        <Route path="/reset-password" element={<PublicRouting element={<ResetPassword />} />} />
         <Route path="/project" element={<PrivateRouting element={<Project />} />} />
         <Route path="/update" element={<UpdateProfile/>}/>
 
