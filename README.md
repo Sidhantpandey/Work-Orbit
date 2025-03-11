@@ -8,4 +8,8 @@ Private Routing Enabled Successfully , without login the user cant access the da
 Added a loader  in home.jsx using context api 
 Added a OOPS 404 Page not found -> using Routes
 Chat Functionality under progress
+Added forgot password option using OTP
+
+
+
 

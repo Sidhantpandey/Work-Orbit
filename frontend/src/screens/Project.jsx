@@ -1,30 +1,24 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect ,useContext} from "react";
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 import axios from '../config/axios'
 import { useLocation } from "react-router-dom";
+import {toast} from 'react-toastify'
+import {socketInitialize,sendMessage,receiveMessage} from '../config/socket'
+import { UserContext } from "../context/user.context.jsx";
+
 
 const Project = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState([]);
   const [project,setProject]=useState({})
+  const [message,setMessage]=useState("")
+  const { user } = useContext(UserContext);
+  const [users,setUsers]=useState([])
+
 
   const location = useLocation();
-  // const users = [
-  //   { id: 1, name: "user1" },
-  //   { id: 2, name: "user2" },
-  //   { id: 3, name: "user3" },
-  //   { id: 4, name: "user4" },
-  //   { id: 5, name: "user5" },
-  //   { id: 6, name: "user6" },
-  //   { id: 7, name: "user7" },
-  //   { id: 8, name: "user8" },
-  //   { id: 9, name: "user9" },
-  //   { id: 10, name: "user10" },
-  // ];
 
-  // we will convert it into a state variable 
-  const [users,setUsers]=useState([])
 
   const handleUserClick = (userId) => {
     setSelectedUser(prevSelected => {
@@ -39,35 +33,60 @@ const Project = () => {
     });
   };
   
+
+  const send=()=>{
+    
+
+
+    sendMessage("project-message",{
+      message,
+      sender:user._id
+    })
+
+    setMessage("");
+  }
   // console.log(location.state) to debug location of project id 
+
   function addCollaborators(){
     axios.put('/projects/add-user',
       {
         projectId:location.state.project._id,
         users:Array.from(selectedUser)
+
       }).then(res=>{
         console.log(res.data);
         setIsModalOpen(false)
+        toast.success('Collaborators added successfully',{ position: "top-right" })
+      }).catch(err=>{
+        console.log(err)
+        toast.error(err.response?.data?.message || "Collaborators addition Failed!", {
+          position: "top-right",
+        });
       })
   }
-// getting all users and storing them in state variable
-  useEffect(() => {
-    axios.get('projects/get-project/'+location.state.project._id).then(res=>{
-      setProject(res.data)
-      console.log(res.data)
-    }).catch(err=>{
-      console.log(err)
-    })
-
-
-
-    axios.get('/users/all').then(res=>{
-      setUsers(res.data.users)
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }, [])
   
+// getting all users and storing them in state variable
+useEffect(() => {
+  // Fetch project and then initialize socket
+  axios.get('projects/get-project/' + location.state.project._id)
+    .then(res => {
+      setProject(res.data);
+      console.log(res.data);
+      socketInitialize(res.data._id); // ✅ Moved here after data is fetched
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+  axios.get('/users/all')
+    .then(res => {
+      setUsers(res.data.users);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}, []);
+
 
   return (
     <main className="h-screen w-screen flex">
@@ -97,11 +116,13 @@ const Project = () => {
           </div>
           <div className="input-field w-full flex">
             <input
+              value={message}
+              onChange={(e)=>setMessage(e.target.value)}
               className="p-2 px-4 flex-grow border-none outline-none"
               type="text"
               placeholder="Enter the message"
             />
-            <button className="px-5 bg-black">
+            <button onClick={send} className="px-5 bg-black">
               <i className="ri-send-plane-fill text-white "></i>
             </button>
           </div>

@@ -2,6 +2,7 @@ import projectModel from "../models/project.models.js";
 import * as projectService from "../services/project.service.js";
 import { validationResult } from "express-validator";
 import userModel from "../models/user.models.js";
+// import transporter from "../services/nodemailer.service.js";
 
 export const createProject = async (req, res) => {
   const errors = validationResult(req);
@@ -50,6 +51,17 @@ export const addUserToProject = async (req, res) => {
     const loggedInUser=await userModel.findOne({email:req.user.email});
 
     const project=await projectService.addUserToProject({projectId,users,userId:loggedInUser._id});
+
+    // const mailOptions = {
+    //   from: process.env.SENDER_EMAIL,
+    //   to: user._doc.email,
+    //     subject: "Congratulations you have been added to a project",
+    //   text: `Hello ,You have been added to a project. You can now collaborate with your team members`,
+    // };
+
+    // await transporter.sendMail(mailOptions);
+
+
     return res.status(200).json({project});
   } catch (error) {
     return res.status(400).json({message:error.message});
