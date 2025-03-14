@@ -23,6 +23,7 @@ io.use(async(socket, next) => {
       // console.log(token)
     // as soon as socket connects it should also add to the room of the project
     const projectId = socket.handshake.query.projectId;
+
     if (!mongoose.Types.ObjectId.isValid(projectId)) {
       return next(new Error("Project ID is invalid"));
     }
@@ -62,12 +63,17 @@ io.on("connection", socket => {
   
   socket.on("project-message",data=>{
     console.log(data);
-    io.to(socket.roomId).emit("project-message",data);
-  })
+    socket.to(socket.roomId).emit("project-message", {
+      ...data,
+      sender: socket.user, // Attach sender info to help frontend filter
+    });
+    })
 
 
-  socket.on("event", (data) => {});
-  socket.on("disconnect", () => {});
+  socket.on("disconnect", () => {
+    console.log(`${socket.user} disconnected successfully`)
+    socket.leave(socket.roomId)
+  });
 });
 
 server.listen(port, () => {

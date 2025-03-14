@@ -1,27 +1,29 @@
-import React, { useState,useEffect ,useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
-import axios from '../config/axios'
+import axios from "../config/axios";
 import { useLocation } from "react-router-dom";
-import {toast} from 'react-toastify'
-import {socketInitialize,sendMessage,receiveMessage} from '../config/socket'
+import { toast } from "react-toastify";
+import {
+  socketInitialize,
+  sendMessage,
+  receiveMessage,
+} from "../config/socket";
 import { UserContext } from "../context/user.context.jsx";
-
 
 const Project = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState([]);
-  const [project,setProject]=useState({})
-  const [message,setMessage]=useState("")
+  const [project, setProject] = useState({});
+  const [message, setMessage] = useState("");
   const { user } = useContext(UserContext);
-  const [users,setUsers]=useState([])
-
+  const [users, setUsers] = useState([]);
+  const messageBox = React.createRef();
 
   const location = useLocation();
 
-
   const handleUserClick = (userId) => {
-    setSelectedUser(prevSelected => {
+    setSelectedUser((prevSelected) => {
       const newSelectedUserId = new Set(prevSelected);
       if (newSelectedUserId.has(userId)) {
         newSelectedUserId.delete(userId);
@@ -32,67 +34,133 @@ const Project = () => {
       return newSelectedUserId;
     });
   };
-  
 
-  const send=()=>{
-    
-
-
-    sendMessage("project-message",{
+  const send = () => {
+    if(!message.trim()) return ;
+    sendMessage("project-message", {
       message,
-      sender:user._id
-    })
-
+      senderEmail: user.email, // only email, if that's all you need
+    });
+    
+    appendOutgoingMessage(message);
     setMessage("");
-  }
-  // console.log(location.state) to debug location of project id 
+  };
+  // console.log(location.state) to debug location of project id
 
-  function addCollaborators(){
-    axios.put('/projects/add-user',
-      {
-        projectId:location.state.project._id,
-        users:Array.from(selectedUser)
-
-      }).then(res=>{
+  function addCollaborators() {
+    axios
+      .put("/projects/add-user", {
+        projectId: location.state.project._id,
+        users: Array.from(selectedUser),
+      })
+      .then((res) => {
         console.log(res.data);
-        setIsModalOpen(false)
-        toast.success('Collaborators added successfully',{ position: "top-right" })
-      }).catch(err=>{
-        console.log(err)
-        toast.error(err.response?.data?.message || "Collaborators addition Failed!", {
+        setIsModalOpen(false);
+        toast.success("Collaborators added successfully", {
           position: "top-right",
         });
       })
+      .catch((err) => {
+        console.log(err);
+        toast.error(
+          err.response?.data?.message || "Collaborators addition Failed!",
+          {
+            position: "top-right",
+          }
+        );
+      });
   }
-  
-// getting all users and storing them in state variable
-useEffect(() => {
-  // Fetch project and then initialize socket
-  axios.get('projects/get-project/' + location.state.project._id)
-    .then(res => {
-      setProject(res.data);
-      console.log(res.data);
-      socketInitialize(res.data._id); // ✅ Moved here after data is fetched
-    })
-    .catch(err => {
-      console.log(err);
-    });
 
-  axios.get('/users/all')
-    .then(res => {
-      setUsers(res.data.users);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}, []);
+  // getting all users and storing them in state variable
+  useEffect(() => {
+    // Fetch project and then initialize socket
+    axios
+      .get("projects/get-project/" + location.state.project._id)
+      .then((res) => {
+        setProject(res.data);
+        console.log(res.data);
+        socketInitialize(res.data._id);
+        receiveMessage("project-message", (data) => {
+          console.log(data);
+          appendIncomingMessage(data);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
+    axios
+      .get("/users/all")
+      .then((res) => {
+        setUsers(res.data.users);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
+  function appendIncomingMessage(data) {
+    const messageBox = document.querySelector(".message-area");
+
+    const message = document.createElement("div");
+    message.classList.add(
+      "incoming-message",
+      "max-w-64",
+      "flex",
+      "flex-col",
+      "bg-slate-50",
+      "w-fit",
+      "p-1",
+      "rounded-md"
+    );
+
+    message.innerHTML = `
+    <small class='opacity-65 text-xs'>${data.sender?.email}</small>
+    <p class='text-sm'>${data.message}</p>
+  `;
+
+    messageBox.appendChild(message);
+    scrollToBottom()
+
+    // Scroll to the bottom of the message area
+  }
+
+  function appendOutgoingMessage(data){
+    const messageBox = document.querySelector(".message-area");
+
+    const message = document.createElement("div");
+    message.classList.add(
+      "outgoing-message",
+      "max-w-64",
+      "ml-auto",
+      "flex",
+      "flex-col",
+      "bg-slate-50",
+      "w-fit",
+      "p-2",
+      "rounded-md"
+    );
+
+    message.innerHTML = `
+    <small class='opacity-65 text-xs'>${user.email}</small>
+    <p class='text-sm'>${data}</p>
+  `;
+
+    messageBox.appendChild(message);
+    scrollToBottom()
+
+  }
+
+  function scrollToBottom() {
+    if (messageBox.current) {
+      messageBox.current.scrollTop = messageBox.current.scrollHeight;
+    }
+  }
   return (
     <main className="h-screen w-screen flex">
-      <section className="left relative flex flex-col h-full min-w-72 bg-slate-300">
-        <header className="flex justify-between p-4 px-4 w-full bg-slate-100">
-          <button className="flex gap-2" onClick={() => setIsModalOpen(true)}>
+      <section className="left relative flex flex-col h-screen min-w-72 bg-slate-300">
+      <header className="flex justify-between p-4 px-4 w-full bg-slate-100 absolute z-20 top-0">
+      <button className="flex gap-2"  onClick={() => { setIsModalOpen(true)}}>
             <i className="ri-user-add-line"></i>
             <p>Add Collaborators</p>
           </button>
@@ -101,23 +169,16 @@ useEffect(() => {
             <i className="ri-group-line"></i>
           </button>
         </header>
-
-        <div className="conversation-area flex-grow flex flex-col h-full">
-          <div className="message-area p-1 flex-grow flex flex-col gap-2">
-            <div className="incoming-message max-w-64 flex flex-col bg-slate-50 w-fit p-1 rounded-md">
-              <small className="opacity-65 text-xs">example@gmail.com</small>
-              <p className="text-sm">Lorem ipsum dolor sit amet. lorem50</p>
-            </div>
-
-            <div className="outgoing-message max-w-64 ml-auto flex flex-col bg-slate-50 w-fit p-2 rounded-md">
-              <small className="opacity-65 text-xs">example@gmail.com</small>
-              <p className="text-sm">Lorem ipsum dolor sit amet.</p>
-            </div>
-          </div>
+        <div className="conversation-area pt-16 flex-grow flex flex-col h-full relative ">
+          <div 
+            ref={messageBox}
+            className=" overflow-auto mb-4 max-h-full message-area p-1 flex-grow flex flex-col gap-2"
+          >
+           </div>
           <div className="input-field w-full flex">
             <input
               value={message}
-              onChange={(e)=>setMessage(e.target.value)}
+              onChange={(e) => setMessage(e.target.value)}
               className="p-2 px-4 flex-grow border-none outline-none"
               type="text"
               placeholder="Enter the message"
@@ -135,7 +196,7 @@ useEffect(() => {
               animate={{ x: "0%", opacity: 1 }}
               exit={{ x: "-100%", opacity: 0 }}
               transition={{ type: "tween", duration: 0.4 }}
-              className="absolute top-0 left-0 w-full h-full bg-white shadow-lg flex flex-col"
+              className="absolute top-0 z-50 left-0 w-full h-full bg-white shadow-lg flex flex-col"
             >
               <header className="flex justify-between items-center p-4 bg-slate-100">
                 <h2 className="text-lg ">Users</h2>
@@ -148,16 +209,26 @@ useEffect(() => {
               </header>
 
               <div className="users flex flex-col gap-2 ">
-                {project.users && project.users.map(user => {
-                  return (
-                    <div key={user._id} className={`user flex gap-2 items-center p-2 rounded-md  hover:bg-slate-300 ${  Array.from(selectedUser).includes(user._id) ? 'bg-slate-300' : ""} hover:transition-transform duration-200`}>
-                      <div className="aspect-square rounded-full w-fit cursor-pointer h-fit flex items-center px-1 ">
-                        <i className="ri-user-fill"></i>
+                {project.users &&
+                  project.users.map((user) => {
+                    return (
+                      <div
+                        key={user._id}
+                        className={`user flex gap-2 items-center p-2 rounded-md  hover:bg-slate-300 ${
+                          Array.from(selectedUser).includes(user._id)
+                            ? "bg-slate-300"
+                            : ""
+                        } hover:transition-transform duration-200`}
+                      >
+                        <div className="aspect-square rounded-full w-fit cursor-pointer h-fit flex items-center px-1 ">
+                          <i className="ri-user-fill"></i>
+                        </div>
+                        <h1 className="font-normal py-1 text-sm">
+                          {user.email}
+                        </h1>
                       </div>
-                      <h1 className="font-normal py-1 text-sm">{user.email}</h1>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </motion.div>
           )}
@@ -184,15 +255,17 @@ useEffect(() => {
               </header>
 
               <div className="user-list flex flex-col max-h-96 overflow-auto gap-2">
-                {users.map(user => (
+                {users.map((user) => (
                   <div
                     key={user._id}
                     className={`user cursor-pointer flex ${
-                      Array.from(selectedUser).includes(user._id) ? 'bg-slate-300' : ''
+                      Array.from(selectedUser).includes(user._id)
+                        ? "bg-slate-300"
+                        : ""
                     } hover:bg-slate-300 gap-2 items-center p-2 rounded-md transition-all duration-400`}
                     onClick={() => handleUserClick(user._id)}
                   >
-                    <div className="aspect-square rounded-full w-fit cursor-pointer h-fit flex items-center px-1 "> 
+                    <div className="aspect-square rounded-full w-fit cursor-pointer h-fit flex items-center px-1 ">
                       <i className="ri-user-fill "></i>
                     </div>
                     <h1 className="font-normal py-1 text-sm">{user.email}</h1>
@@ -200,7 +273,10 @@ useEffect(() => {
                 ))}
               </div>
 
-              <button onClick={addCollaborators} className="mt-4  bg-red-600 px-4 py-2  rounded-md text-white">
+              <button
+                onClick={addCollaborators}
+                className="mt-4  bg-red-600 px-4 py-2  rounded-md text-white"
+              >
                 Add Collaborators
               </button>
             </div>

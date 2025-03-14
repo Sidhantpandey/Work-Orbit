@@ -32,7 +32,6 @@ const AppRoutes = () => {
         <Route path="/reset-password" element={<PublicRouting element={<ResetPassword />} />} />
         <Route path="/project" element={<PrivateRouting element={<Project />} />} />
         <Route path="/update" element={<UpdateProfile/>}/>
-
         <Route path="*" element={<Link/>}/>
       </Routes>
     </BrowserRouter>

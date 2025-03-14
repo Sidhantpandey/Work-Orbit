@@ -59,3 +59,11 @@ body {
 .animate-wave {
   animation: wave 1.5s infinite ease-in-out;
 }
+
+.message-area::-webkit-scrollbar{
+  display: none;
+}
+
+.message-area{
+  scroll-behavior: smooth;
+}
