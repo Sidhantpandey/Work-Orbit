@@ -1,5 +1,6 @@
-backend/.env
-backend/node_modules
-backend/.env.enc
-
-
+.prettierrc
+server/node_modules
+server/.env
+client/node_modules
+client/.env
+node_modules
