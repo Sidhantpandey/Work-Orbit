@@ -33,7 +33,7 @@ const Testimonials = () => {
   return (
     <div className="bg-white py-16 overflow-hidden relative">
       <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
-        What developers say about Prisma
+        What developers say about Us 
       </h2>
 
       {/* Animation wrapper */}
@@ -42,7 +42,7 @@ const Testimonials = () => {
           className="flex flex-col gap-6 animate-slideUp"
           initial={{ y: "100%" }}
           animate={{ y: "-100%" }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
         >
           {[...testimonials, ...testimonials].map((t, index) => (
             <div

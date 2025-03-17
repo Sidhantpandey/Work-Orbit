@@ -115,14 +115,14 @@ const Home = () => {
 
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto text-center mt-24 mb-16">
-        <p className="text-3xl text-gray-500">Welcome</p>
-        <h1 className="text-5xl sm:text-6xl font-bold mt-4 h-20 text-indigo-600">
+        <p className="text-3xl text-gray-700">Welcome</p>
+        <h1 className="text-5xl sm:text-6xl font-bold mt-4 h-20 text-indigo-900">
           {displayText}
-          <span className="border-r-2 border-indigo-600 animate-pulse ml-1" />
+          <span className="border-r-2 border-indigo-00 animate-pulse ml-1" />
         </h1>
         <p className="text-2xl mt-4 text-gray-700">
           Hello,{" "}
-          <span className="font-semibold text-indigo-700">
+          <span className="font-semibold text-indigo-900">
             {user?.name?.split(" ")[0]}
           </span>{" "}
           👋
@@ -130,19 +130,19 @@ const Home = () => {
         <div className="flex flex-wrap justify-center gap-4 mt-8">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow"
+            className="bg-indigo-600 hover:bg-indigo-900 text-white px-6 py-2 rounded-lg shadow"
           >
             Create Project
           </button>
           <button
             onClick={() => navigate("/update")}
-            className="border border-indigo-500 text-indigo-700 px-6 py-2 rounded-lg hover:bg-indigo-50"
+            className="border border-indigo-800 text-indigo-900 px-6 py-2 rounded-lg hover:bg-indigo-100"
           >
             Update Profile
           </button>
           <button
             onClick={logout}
-            className="border border-red-400 text-red-600 px-6 py-2 rounded-lg hover:bg-red-50"
+            className="border border-red-800 text-red-800 px-6 py-2 rounded-lg hover:bg-red-100"
           >
             Logout
           </button>
@@ -176,15 +176,14 @@ const Home = () => {
           {/* Text Side */}
           <div className="md:w-1/2">
             <h2 className="text-4xl font-extrabold mb-4">
-              Get a database{" "}
-              <span className="text-teal-600">in an instant</span>
+              Lorem, ipsum dolor.{" "}
+              <span className="text-teal-600">Lorem ipsum dolor sit.</span>
             </h2>
             <p className="text-lg text-gray-700 mb-2">
-              Deploy a managed database instantly. Auto-scales with your
-              workload.
+         Lorem ipsum dolor sit amet consectetur adipisicing elit
             </p>
             <p className="text-sm text-gray-500">
-              Serverless, without the cold starts.
+             Lorem ipsum dolor sit amet.
             </p>
           </div>
 
@@ -200,13 +199,13 @@ const Home = () => {
           <div className="md:w-1/2 bg-gray-100 p-6 rounded-xl shadow-md">
             <div className="flex justify-between items-center mb-4">
               <div className="text-gray-600">
-                Databases <span className="text-black font-bold">12</span>
+               lorem <span className="text-black font-bold">12</span>
               </div>
               <div className="text-gray-600">
-                Showing <span className="text-black font-bold">3</span> of 12
+              lorem <span className="text-black font-bold">3</span> of 12
               </div>
               <button className="bg-teal-600 hover:bg-teal-700 px-3 py-1 text-sm text-white rounded">
-                Add database +
+               lorem
               </button>
             </div>
 
@@ -224,22 +223,27 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+
+
       <section className="bg-white text-gray-900 py-16 px-6 md:px-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start gap-10 md:gap-16">
           {/* Left: Code Block */}
           <div className="w-full md:w-1/2">
             <div className="inline-block mb-4 px-3 py-1 rounded-md border border-teal-500 text-sm text-teal-600 bg-teal-50">
-              Caching
+              button
             </div>
             <div className="bg-gray-100 text-sm p-4 rounded-lg border border-gray-300 font-mono relative">
               <pre className="whitespace-pre-wrap text-gray-800">
-                {`await prisma.user.findMany({
-  where: { published: true },
-  cacheStrategy: {
-    ttl: 60,
-    swr: 60
-  }
-});`}
+                {`code
+                
+                
+                
+                
+                
+                
+                                
+code`}
               </pre>
               <button
                 className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
@@ -269,21 +273,19 @@ const Home = () => {
           {/* Right: Text Content */}
           <div className="w-full md:w-1/2 space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Redefining how your database works
+              Lorem ipsum dolor sit amet.
             </h2>
             <p className="text-gray-700">
-              Add query-level cache strategies with one line of code to serve
-              data fast from our global edge network.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, nam?
             </p>
             <p className="text-gray-700">
               <a
                 href="#"
                 className="text-teal-600 underline hover:text-teal-800"
               >
-                Unikernel-powered ↗
+                Lorem, ipsum.
               </a>{" "}
-              microVMs, running on bare-metal servers, maximize database
-              performance.
+             Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, beatae!
             </p>
           </div>
         </div>
@@ -294,21 +296,18 @@ const Home = () => {
           {/* Right: Text Content */}
           <div className="w-full md:w-1/2 space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Redefining how your database works
-            </h2>
+Lorem ipsum dolor sit amet.            </h2>
             <p className="text-gray-700">
-              Add query-level cache strategies with one line of code to serve
-              data fast from our global edge network.
+           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, unde?
             </p>
             <p className="text-gray-700">
               <a
                 href="#"
                 className="text-teal-600 underline hover:text-teal-800"
               >
-                Unikernel-powered ↗
+               Lorem, ipsum.
               </a>{" "}
-              microVMs, running on bare-metal servers, maximize database
-              performance.
+           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed, eos.
             </p>
           </div>
 
@@ -324,17 +323,15 @@ const Home = () => {
           {/* Left: Code Block */}
           <div className="w-full md:w-1/2">
             <div className="inline-block mb-4 px-3 py-1 rounded-md border border-teal-500 text-sm text-teal-600 bg-teal-50">
-              Caching
-            </div>
+button            </div>
             <div className="bg-gray-100 text-sm p-4 rounded-lg border border-gray-300 font-mono relative">
               <pre className="whitespace-pre-wrap text-gray-800">
-                {`await prisma.user.findMany({
-  where: { published: true },
-  cacheStrategy: {
-    ttl: 60,
-    swr: 60
-  }
-});`}
+                {`<code>
+                
+                
+                
+                
+</code>`}
               </pre>
               <button
                 className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
@@ -372,10 +369,9 @@ const Home = () => {
         <div className="max-w-7xl mx-auto">
           {/* Top Call to Action */}
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-2">Ready to try Prisma?</h2>
+            <h2 className="text-3xl font-bold mb-2">Ready to try It ?</h2>
             <p className="text-gray-600">
-              Deploy a database in an instant to experience the power of Prisma.
-            </p>
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, minus.            </p>
             <button className="mt-6 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-md text-lg font-medium transition">
               Get Started now →
             </button>
@@ -385,21 +381,17 @@ const Home = () => {
           <div className="flex flex-col md:flex-row justify-between mt-12 gap-10 text-sm text-gray-600">
             <div className="flex flex-col gap-4">
               <h4 className="text-gray-900 font-semibold">PRODUCT</h4>
-              <a href="#">ORM</a>
-              <a href="#">Studio</a>
+     
               <a href="#">Optimize</a>
-              <a href="#">Accelerate</a>
+     
               <a href="#">Pricing</a>
-              <a href="#">Changelog</a>
             </div>
 
             <div className="flex flex-col gap-4">
               <h4 className="text-gray-900 font-semibold">RESOURCES</h4>
               <a href="#">Docs</a>
-              <a href="#">Ecosystem</a>
-              <a href="#">ORM Benchmarks ↗</a>
+
               <a href="#">Customer stories</a>
-              <a href="#">Data guide</a>
             </div>
 
             <div className="flex flex-col gap-4">
@@ -408,7 +400,6 @@ const Home = () => {
               <a href="#">Support</a>
               <a href="#">Enterprise</a>
               <a href="#">Partners</a>
-              <a href="#">OSS Friends</a>
             </div>
 
             <div className="flex flex-col gap-4">
@@ -433,7 +424,7 @@ const Home = () => {
 
           {/* Copyright */}
           <p className="mt-8 text-center text-gray-500 text-sm">
-            © {new Date().getFullYear()} Prisma – All rights reserved.
+            © {new Date().getFullYear()} – All rights reserved.
           </p>
         </div>
       </footer>

@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import Project from "./models/project.models.js";
+import {generateResult} from './services/gemini.services.js'
 
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
@@ -61,8 +62,28 @@ io.on("connection", socket => {
 
   socket.join(socket.roomId);
   
-  socket.on("project-message",data=>{
+  socket.on("project-message",async data=>{
+
+    const message=data.message;
+    const isAiPresent= message.includes('ai?');
+    if(isAiPresent){
+     
+      const prompt=message.replace('ai?','');
+
+      const result = await generateResult(prompt);
+
+      io.to(socket.roomId).emit('project-message',{
+        message:result,
+        sender:{
+          _id:'ai',
+         email:'AI'
+        }
+      })
+    }
+
     console.log(data);
+
+
     socket.to(socket.roomId).emit("project-message", {
       ...data,
       sender: socket.user, // Attach sender info to help frontend filter

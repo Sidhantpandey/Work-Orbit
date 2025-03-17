@@ -73,14 +73,19 @@ const Project = () => {
 
   // getting all users and storing them in state variable
   useEffect(() => {
-    // Fetch project and then initialize socket
+    let unsubscribe;
+  
     axios
       .get("projects/get-project/" + location.state.project._id)
       .then((res) => {
         setProject(res.data);
         console.log(res.data);
+  
+        // Initialize socket
         socketInitialize(res.data._id);
-        receiveMessage("project-message", (data) => {
+  
+        // Setup listener and keep reference to unsubscribe
+        unsubscribe = receiveMessage("project-message", (data) => {
           console.log(data);
           appendIncomingMessage(data);
         });
@@ -88,7 +93,7 @@ const Project = () => {
       .catch((err) => {
         console.log(err);
       });
-
+  
     axios
       .get("/users/all")
       .then((res) => {
@@ -97,7 +102,13 @@ const Project = () => {
       .catch((err) => {
         console.log(err);
       });
+  
+    // Clean up listener when component unmounts
+    return () => {
+      if (unsubscribe) unsubscribe(); // Remove listener
+    };
   }, []);
+  
 
   function appendIncomingMessage(data) {
     const messageBox = document.querySelector(".message-area");

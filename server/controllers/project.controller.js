@@ -15,7 +15,6 @@ export const createProject = async (req, res) => {
     const loggedInUser = await userModel.findOne({ email: req.user.email });
     const userId = loggedInUser._id;
     const newProject = await projectService.createProject({ name, userId });
-    
 
     return res.status(201).json(newProject);
   } catch (error) {
@@ -25,14 +24,15 @@ export const createProject = async (req, res) => {
 
 export const getAllProjects = async (req, res) => {
   try {
-
     const loggedInUser = await userModel.findOne({ email: req.user.email });
 
     if (!loggedInUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const alluserProjects = await projectService.getAllProjectsbyUserId(loggedInUser._id);
+    const alluserProjects = await projectService.getAllProjectsbyUserId(
+      loggedInUser._id
+    );
 
     return res.status(200).json({ projects: alluserProjects });
   } catch (error) {
@@ -40,42 +40,43 @@ export const getAllProjects = async (req, res) => {
   }
 };
 
-
 export const addUserToProject = async (req, res) => {
-  const errors=validationResult(req);
-  if(!errors.isEmpty()){
-    return res.status(400).json({errors:errors.array()});
-  } 
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
-    const {projectId,users}=req.body;
-    const loggedInUser=await userModel.findOne({email:req.user.email});
+    const { projectId, users } = req.body;
+    const loggedInUser = await userModel.findOne({ email: req.user.email });
 
-    const project=await projectService.addUserToProject({projectId,users,userId:loggedInUser._id});
+    const project = await projectService.addUserToProject({
+      projectId,
+      users,
+      userId: loggedInUser._id,
+    });
 
     // const mailOptions = {
     //   from: process.env.SENDER_EMAIL,
-    //   to: user._doc.email,
-    //     subject: "Congratulations you have been added to a project",
+    //   to: users._doc.email,
+    //   subject: "Congratulations you have been added to a project",
     //   text: `Hello ,You have been added to a project. You can now collaborate with your team members`,
     // };
 
     // await transporter.sendMail(mailOptions);
 
-
-    return res.status(200).json({project});
+    return res.status(200).json({ project });
   } catch (error) {
-    return res.status(400).json({message:error.message});
-  }
-}
-
-export const getProjectById = async (req, res) => {
-  const {projectId}=req.params;
-  try {
-    const project=await projectService.getProjectById(projectId);
-    return res.status(200).json(project);
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json({message:error.message});
+    return res.status(400).json({ message: error.message });
   }
 };
 
+export const getProjectById = async (req, res) => {
+  const { projectId } = req.params;
+  try {
+    const project = await projectService.getProjectById(projectId);
+    return res.status(200).json(project);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: error.message });
+  }
+};
