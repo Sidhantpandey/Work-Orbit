@@ -24,12 +24,12 @@ const Navbar = () => {
         </div>
 
         {/* Center Nav Links (Pill style) */}
-        <div className="hidden md:flex items-center bg-gray-100 px-6 py-2 rounded-full text-lg font-semibold text-gray-700 shadow-inner">
-          <Link to="#" className="px-4 py-1 hover:text-blue-600 transition">Products</Link>
-          <Link to="#" className="px-4 py-1 hover:text-blue-600 transition">Pricing</Link>
-          <Link to="#" className="px-4 py-1 hover:text-blue-600 transition">Resources</Link>
-          <Link to="#" className="px-4 py-1 hover:text-blue-600 transition">Docs</Link>
-          <Link to="#" className="px-4 py-1 text-blue-600 hover:text-black transition">Blog</Link>
+        <div className="hidden md:flex items-center bg-gray-100 px-6 py-2 rounded-full text-lg font-semibold text-gray-900 shadow-inner">
+          <Link to="#" className="px-4 py-1 hover:text-blue-900 transition">Products</Link>
+          <Link to="#" className="px-4 py-1 hover:text-blue-900 transition">Pricing</Link>
+          <Link to="#" className="px-4 py-1 hover:text-blue-900 transition">Resources</Link>
+          <Link to="#" className="px-4 py-1 hover:text-blue-900 transition">Docs</Link>
+          <Link to="#" className="px-4 py-1 text-blue-900 hover:text-black transition">Blog</Link>
         </div>
 
         {/* Right Side */}
@@ -41,18 +41,18 @@ const Navbar = () => {
             className="flex items-center gap-2 text-gray-600 hover:text-black transition"
           >
             <FaGithub size={18} />
-            <span className="text-sm hidden sm:inline">41.5K</span>
+            <span className="text-sm hidden sm:inline">1k</span>
           </a>
 
           <Link
             to="/login"
-            className="px-4 py-1.5 text-gray-700 border border-blue-500 rounded-md hover:bg-blue-100 transition text-sm"
+            className="px-4 py-1.5 text-gray-700 border border-blue-700 rounded-md hover:bg-blue-100 transition text-sm"
           >
             Log in
           </Link>
           <Link
             to="/signup"
-            className="px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition text-sm"
+            className="px-4 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-900 transition text-sm"
           >
             Sign up
           </Link>

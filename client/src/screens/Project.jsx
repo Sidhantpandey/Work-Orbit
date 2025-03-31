@@ -73,15 +73,18 @@ const Project = () => {
 
   // getting all users and storing them in state variable
   useEffect(() => {
+    let isMounted = true;
     let unsubscribe;
   
     axios
       .get("projects/get-project/" + location.state.project._id)
       .then((res) => {
+        if (!isMounted) return;
+        
         setProject(res.data);
         console.log(res.data);
   
-        // Initialize socket
+        // Initialize socket only once
         socketInitialize(res.data._id);
   
         // Setup listener and keep reference to unsubscribe
@@ -97,6 +100,7 @@ const Project = () => {
     axios
       .get("/users/all")
       .then((res) => {
+        if (!isMounted) return;
         setUsers(res.data.users);
       })
       .catch((err) => {
@@ -105,11 +109,11 @@ const Project = () => {
   
     // Clean up listener when component unmounts
     return () => {
+      isMounted = false;
       if (unsubscribe) unsubscribe(); // Remove listener
     };
   }, []);
   
-
   function appendIncomingMessage(data) {
     const messageBox = document.querySelector(".message-area");
 
@@ -167,6 +171,7 @@ const Project = () => {
       messageBox.current.scrollTop = messageBox.current.scrollHeight;
     }
   }
+
   return (
     <main className="h-screen w-screen flex">
       <section className="left relative flex flex-col h-screen min-w-72 bg-slate-300">

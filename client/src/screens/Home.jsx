@@ -160,10 +160,10 @@ const Home = () => {
             <div
               key={project._id}
               onClick={() => navigate("/project", { state: { project } })}
-              className="cursor-pointer p-6 bg-gray-100 border hover:shadow-xl transition rounded-lg"
+              className="cursor-pointer p-6 bg-gray-200 border-2 hover:shadow-xl transition rounded-lg"
             >
               <h2 className="text-2xl font-semibold mb-2">{project.name}</h2>
-              <p className="text-gray-600">
+              <p className="text-gray-800">
                 {project.users.length} collaborators
               </p>
             </div>

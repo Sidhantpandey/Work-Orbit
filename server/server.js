@@ -5,23 +5,23 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import Project from "./models/project.models.js";
-import {generateResult} from './services/gemini.services.js'
+import { generateResult } from "./services/gemini.services.js";
 
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
-const io = new Server(server,{
-  cors:{
-    origin:"*"
-  }
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
 });
 
 // Middleware to authenticate socket connections
-io.use(async(socket, next) => {
+io.use(async (socket, next) => {
   try {
     const token =
       socket.handshake.auth.token ||
       socket.handshake.headers.authorization?.split(" ")[1];
-      // console.log(token)
+    // console.log(token)
     // as soon as socket connects it should also add to the room of the project
     const projectId = socket.handshake.query.projectId;
 
@@ -29,9 +29,9 @@ io.use(async(socket, next) => {
       return next(new Error("Project ID is invalid"));
     }
 
-    socket.project=  await Project.findById(projectId);
+    socket.project = await Project.findById(projectId);
 
-    if(!socket.project){
+    if (!socket.project) {
       return next(new Error("Project not found"));
     }
 
@@ -54,46 +54,41 @@ io.use(async(socket, next) => {
   }
 });
 
-io.on("connection", socket => {
-  
+io.on("connection", (socket) => {
   console.log("Socket connected", socket.user);
-  socket.roomId=socket.project._id.toString();
-
+  socket.roomId = socket.project._id.toString();
 
   socket.join(socket.roomId);
-  
-  socket.on("project-message",async data=>{
 
-    const message=data.message;
-    const isAiPresent= message.includes('ai?');
-    if(isAiPresent){
-     
-      const prompt=message.replace('ai?','');
+  socket.on("project-message", async (data) => {
+    const message = data.message;
+    const isAiPresent = message.includes("ai?");
+
+    if (isAiPresent) {
+      const prompt = message.replace("ai?", "");
 
       const result = await generateResult(prompt);
 
-      io.to(socket.roomId).emit('project-message',{
-        message:result,
-        sender:{
-          _id:'ai',
-         email:'AI'
-        }
-      })
+      io.to(socket.roomId).emit("project-message", {
+        message: result,
+        sender: {
+          _id: "ai",
+          email: "AI",
+        },
+      });
     }
 
     console.log(data);
-
 
     socket.to(socket.roomId).emit("project-message", {
       ...data,
       sender: socket.user, // Attach sender info to help frontend filter
     });
-    })
-
+  });
 
   socket.on("disconnect", () => {
-    console.log(`${socket.user} disconnected successfully`)
-    socket.leave(socket.roomId)
+    console.log(`${socket.user} disconnected successfully`);
+    socket.leave(socket.roomId);
   });
 });
 
