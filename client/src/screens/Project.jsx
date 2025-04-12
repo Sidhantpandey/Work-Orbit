@@ -9,6 +9,7 @@ import {
   receiveMessage,
 } from "../config/socket";
 import { UserContext } from "../context/user.context.jsx";
+import Markdown from 'markdown-to-jsx'
 
 const Project = () => {
   const [showProfile, setShowProfile] = useState(false);
@@ -129,10 +130,20 @@ const Project = () => {
       "rounded-md"
     );
 
-    message.innerHTML = `
-    <small class='opacity-65 text-xs'>${data.sender?.email}</small>
-    <p class='text-sm'>${data.message}</p>
-  `;
+    if(messageObject.sender._id==='ai'){
+      const markdown =(<Markdown>{data.message}</Markdown>)
+      message.innerHTML = `
+      <small class='opacity-65 text-xs'>${data.sender?.email}</small>
+      <p class='text-sm'>${markdown}</p>
+    `;
+    }
+    else{
+      message.innerHTML = `
+      <small class='opacity-65 text-xs'>${data.sender?.email}</small>
+      <p class='text-sm'>${data.message}</p>
+    `;
+  
+    }
 
     messageBox.appendChild(message);
     scrollToBottom()
