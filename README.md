@@ -17,8 +17,6 @@ A modern, full-stack AI-powered project management and team collaboration platfo
 ---
 
 
----
-
 ##  Tech Stack
 
 ### Frontend
