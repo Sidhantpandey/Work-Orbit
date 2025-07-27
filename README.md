@@ -16,27 +16,6 @@ A modern, full-stack AI-powered project management and team collaboration platfo
 
 ---
 
-##  Project Structure
-
-├── .husky/ # Git hooks
-├── client/ # Frontend (React + Vite)
-│ ├── public/ # Static files
-│ ├── src/
-│ │ ├── assets/ 
-│ │ ├── components/ 
-│ │ ├── config/ 
-│ │ ├── context/ 
-│ │ ├── routes/ 
-│ │ ├── screens/ 
-│ │ ├── App.jsx 
-│ │ ├── main.jsx
-│ │ └── index.css 
-├── server/ 
-│ ├── index.js
-│ └── routes/
-├── .env 
-├── README.md 
-
 
 ---
 
