@@ -4,9 +4,19 @@
   "description": "Under Progress",
   "main": "index.js",
   "scripts": {
+    "test": "echo \"No tests yet\" && exit 0",
     "start": "concurrently \"npm run server\"  \"npm run client\"",
     "server": "cd server & npm run start",
-    "client": "cd client && npm run dev"
+    "client": "cd client && npm run dev",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js, jsx,ts,tsx}": [
+      "eslint --quiet --fix"
+    ],
+    "*.{json,js,ts,jsx,tsx,html}": [
+      "prettier --write --ignore-unknown"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -15,6 +25,14 @@
     "framer-motion": "^12.5.0"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "@eslint/js": "^9.32.0",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.3.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2"
   }
 }

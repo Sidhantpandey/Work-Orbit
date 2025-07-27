@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "../components/Loader/Loader.css";
 import Navbar from "./Navbar.jsx";
-import { FiZap } from "react-icons/fi";
+import { Zap, Code, Users, Star, ArrowRight, Copy } from "lucide-react";
 import {
   FaDiscord,
   FaGithub,
@@ -45,7 +45,7 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
 
-  const fullText = "Build dreams Lead boldly Inspire ";
+  const fullText = "Create Amazing Projects ";
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [index, setIndex] = useState(0);
@@ -110,352 +110,363 @@ const Home = () => {
   }
 
   return (
-    <main className="min-h-screen bg-white text-gray-900 px-6 pt-4">
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="max-w-5xl mx-auto text-center mt-24 mb-16">
-        <p className="text-3xl text-gray-700">Welcome</p>
-        <h1 className="text-5xl sm:text-6xl font-bold mt-4 h-20 text-indigo-900">
-          {displayText}
-          <span className="border-r-2 border-indigo-00 animate-pulse ml-1" />
-        </h1>
-        <p className="text-2xl mt-4 text-gray-700">
-          Hello,{" "}
-          <span className="font-semibold text-indigo-900">
-            {user?.name?.split(" ")[0]}
-          </span>{" "}
-          👋
-        </p>
-        <div className="flex flex-wrap justify-center gap-4 mt-8">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-indigo-600 hover:bg-indigo-900 text-white px-6 py-2 rounded-lg shadow"
-          >
-            Create Project
-          </button>
-          <button
-            onClick={() => navigate("/update")}
-            className="border border-indigo-800 text-indigo-900 px-6 py-2 rounded-lg hover:bg-indigo-100"
-          >
-            Update Profile
-          </button>
-          <button
-            onClick={logout}
-            className="border border-red-800 text-red-800 px-6 py-2 rounded-lg hover:bg-red-100"
-          >
-            Logout
-          </button>
+      <section className="max-w-6xl mx-auto px-6 pt-20 pb-16">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-xl border border-white/20">
+          <div className="text-center">
+            <div className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Welcome back, {user?.name?.split(" ")[0]}! 👋
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-6 h-20">
+              {displayText}
+              <span className="border-r-2 border-purple-500 animate-pulse ml-1" />
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              Build, collaborate, and innovate with your team using our powerful project management platform.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold flex items-center justify-center gap-2"
+              >
+                <Zap size={20} />
+                Create New Project
+              </button>
+              <button
+                onClick={() => navigate("/update")}
+                className="bg-white/50 backdrop-blur-sm border-2 border-purple-300 text-purple-700 px-8 py-4 rounded-xl hover:bg-white/80 transition-all duration-300 font-semibold"
+              >
+                Update Profile
+              </button>
+              <button
+                onClick={logout}
+                className="bg-white/50 backdrop-blur-sm border-2 border-red-300 text-red-600 px-8 py-4 rounded-xl hover:bg-white/80 transition-all duration-300 font-semibold"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Projects List */}
-      <section className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 mb-20">
+      {/* Stats Section */}
+      <section className="max-w-6xl mx-auto px-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg">
+            <div className="text-3xl font-bold mb-2">{projects.length}</div>
+            <div className="text-purple-100">Active Projects</div>
+          </div>
+          <div className="bg-gradient-to-br from-pink-500 to-pink-600 text-white p-6 rounded-2xl shadow-lg">
+            <div className="text-3xl font-bold mb-2">
+              {projects.reduce((acc, project) => acc + project.users.length, 0)}
+            </div>
+            <div className="text-pink-100">Team Members</div>
+          </div>
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-2xl shadow-lg">
+            <div className="text-3xl font-bold mb-2">98%</div>
+            <div className="text-blue-100">Success Rate</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Grid */}
+      <section className="max-w-6xl mx-auto px-6 mb-20">
+        <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          Your Projects
+        </h2>
         {loading ? (
-          <div className="col-span-full flex justify-center">
+          <div className="flex justify-center">
             <div className="loader"></div>
           </div>
         ) : (
-          projects.map((project) => (
-            <div
-              key={project._id}
-              onClick={() => navigate("/project", { state: { project } })}
-              className="cursor-pointer p-6 bg-gray-200 border-2 hover:shadow-xl transition rounded-lg"
-            >
-              <h2 className="text-2xl font-semibold mb-2">{project.name}</h2>
-              <p className="text-gray-800">
-                {project.users.length} collaborators
-              </p>
-            </div>
-          ))
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project, index) => (
+              <div
+                key={project._id}
+                onClick={() => navigate("/project", { state: { project } })}
+                className={`cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${
+                  index % 3 === 0
+                    ? "bg-gradient-to-br from-purple-400 to-purple-500"
+                    : index % 3 === 1
+                    ? "bg-gradient-to-br from-pink-400 to-pink-500"
+                    : "bg-gradient-to-br from-blue-400 to-blue-500"
+                } text-white`}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Code size={24} />
+                  </div>
+                  <ArrowRight size={20} className="opacity-70" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
+                <div className="flex items-center gap-2 opacity-80">
+                  <Users size={16} />
+                  <span>{project.users.length} collaborators</span>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </section>
 
-      <section className="bg-white text-gray-900 py-20 px-6 rounded-2xl shadow-inner mt-12">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-          {/* Text Side */}
-          <div className="md:w-1/2">
-            <h2 className="text-4xl font-extrabold mb-4">
-              Lorem, ipsum dolor.{" "}
-              <span className="text-teal-600">Lorem ipsum dolor sit.</span>
+      {/* Feature Section 1 */}
+      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-20 px-6 mb-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">
+              Powerful Features for Modern Teams
             </h2>
-            <p className="text-lg text-gray-700 mb-2">
-         Lorem ipsum dolor sit amet consectetur adipisicing elit
-            </p>
-            <p className="text-sm text-gray-500">
-             Lorem ipsum dolor sit amet.
+            <p className="text-xl text-purple-100 max-w-2xl mx-auto">
+              Everything you need to manage projects efficiently and collaborate seamlessly
             </p>
           </div>
-
-          {/* Zap Icon & Line */}
-          <div className="hidden md:flex flex-col items-center justify-center">
-            <div className="text-teal-600 bg-teal-100 p-2 rounded-full shadow-md">
-              <FiZap size={25} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-4">Real-time Collaboration</h3>
+              <p className="text-purple-100 mb-6">
+                Work together in real-time with your team members. See changes instantly and never lose track of progress.
+              </p>
+              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 bg-green-400 rounded-full"></div>
+                  <span>John Doe is editing...</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-400 rounded-full"></div>
+                  <span>Sarah Chen joined the project</span>
+                </div>
+              </div>
             </div>
-            <div className="w-px h-32 bg-gradient-to-b from-teal-500 to-transparent mt-1" />
-          </div>
-
-          {/* Visual Side */}
-          <div className="md:w-1/2 bg-gray-100 p-6 rounded-xl shadow-md">
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-gray-600">
-               lorem <span className="text-black font-bold">12</span>
+            <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span>Project Progress</span>
+                  <span className="text-green-300">87%</span>
+                </div>
+                <div className="w-full bg-white/20 rounded-full h-3">
+                  <div className="bg-gradient-to-r from-green-400 to-blue-400 h-3 rounded-full w-[87%]"></div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-6">
+                  <div className="bg-white/10 p-4 rounded-xl text-center">
+                    <div className="text-2xl font-bold">24</div>
+                    <div className="text-sm opacity-80">Tasks Done</div>
+                  </div>
+                  <div className="bg-white/10 p-4 rounded-xl text-center">
+                    <div className="text-2xl font-bold">4</div>
+                    <div className="text-sm opacity-80">Pending</div>
+                  </div>
+                </div>
               </div>
-              <div className="text-gray-600">
-              lorem <span className="text-black font-bold">3</span> of 12
-              </div>
-              <button className="bg-teal-600 hover:bg-teal-700 px-3 py-1 text-sm text-white rounded">
-               lorem
-              </button>
-            </div>
-
-            <div className="h-28 bg-white border rounded mb-6 shadow-sm" />
-
-            <div className="flex justify-center items-end gap-6">
-              <div className="bg-teal-500 w-16 h-8 rounded-t-full relative">
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-teal-300 rounded-full animate-ping" />
-              </div>
-              <div className="bg-teal-300 w-16 h-10 rounded-t-full relative">
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-teal-100 rounded-full animate-ping" />
-              </div>
-              <div className="bg-blue-300 w-16 h-12 rounded-t-full" />
             </div>
           </div>
         </div>
       </section>
 
-
-
-      <section className="bg-white text-gray-900 py-16 px-6 md:px-16">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start gap-10 md:gap-16">
-          {/* Left: Code Block */}
-          <div className="w-full md:w-1/2">
-            <div className="inline-block mb-4 px-3 py-1 rounded-md border border-teal-500 text-sm text-teal-600 bg-teal-50">
-              button
+      {/* Code Section */}
+      <section className="max-w-6xl mx-auto px-6 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Developer Friendly
             </div>
-            <div className="bg-gray-100 text-sm p-4 rounded-lg border border-gray-300 font-mono relative">
-              <pre className="whitespace-pre-wrap text-gray-800">
-                {`code
-                
-                
-                
-                
-                
-                
-                                
-code`}
-              </pre>
-              <button
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-                onClick={() =>
-                  navigator.clipboard.writeText(`await prisma.user.findMany({
-  where: { published: true },
-  cacheStrategy: {
-    ttl: 60,
-    swr: 60
-  }
-});`)
-                }
-              >
-                📋
-              </button>
-            </div>
-          </div>
-
-          {/* Center Divider */}
-          <div className="hidden md:flex flex-col items-center justify-center">
-            <div className="text-teal-600 bg-teal-100 p-2 rounded-full shadow-md">
-              <FiZap size={20} />
-            </div>
-            <div className="w-px h-32 bg-gradient-to-b from-teal-500 to-transparent mt-1" />
-          </div>
-
-          {/* Right: Text Content */}
-          <div className="w-full md:w-1/2 space-y-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Lorem ipsum dolor sit amet.
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Built for Developers, by Developers
             </h2>
-            <p className="text-gray-700">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, nam?
+            <p className="text-gray-600 mb-6">
+              Integrate seamlessly with your existing workflow. Use our powerful API and webhooks to automate your processes.
             </p>
-            <p className="text-gray-700">
-              <a
-                href="#"
-                className="text-teal-600 underline hover:text-teal-800"
-              >
-                Lorem, ipsum.
-              </a>{" "}
-             Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, beatae!
-            </p>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>RESTful API with comprehensive documentation</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Webhook support for real-time updates</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>SDK available in multiple languages</span>
+              </li>
+            </ul>
           </div>
-        </div>
-      </section>
-
-      <section className="bg-white text-gray-900 py-16 px-6 md:px-16">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start gap-10 md:gap-16">
-          {/* Right: Text Content */}
-          <div className="w-full md:w-1/2 space-y-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-Lorem ipsum dolor sit amet.            </h2>
-            <p className="text-gray-700">
-           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, unde?
-            </p>
-            <p className="text-gray-700">
-              <a
-                href="#"
-                className="text-teal-600 underline hover:text-teal-800"
-              >
-               Lorem, ipsum.
-              </a>{" "}
-           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed, eos.
-            </p>
-          </div>
-
-          {/* Center Divider */}
-
-          <div className="hidden md:flex flex-col items-center justify-center">
-            <div className="text-teal-600 bg-teal-100 p-2 rounded-full shadow-md">
-              <FiZap size={20} />
-            </div>
-            <div className="w-px h-32 bg-gradient-to-b from-teal-500 to-transparent mt-1" />
-          </div>
-
-          {/* Left: Code Block */}
-          <div className="w-full md:w-1/2">
-            <div className="inline-block mb-4 px-3 py-1 rounded-md border border-teal-500 text-sm text-teal-600 bg-teal-50">
-button            </div>
-            <div className="bg-gray-100 text-sm p-4 rounded-lg border border-gray-300 font-mono relative">
-              <pre className="whitespace-pre-wrap text-gray-800">
-                {`<code>
-                
-                
-                
-                
-</code>`}
-              </pre>
+          <div className="bg-gray-900 text-green-400 p-6 rounded-2xl font-mono text-sm overflow-hidden">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              </div>
               <button
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-                onClick={() =>
-                  navigator.clipboard.writeText(`await prisma.user.findMany({
-  where: { published: true },
-  cacheStrategy: {
-    ttl: 60,
-    swr: 60
-  }
-});`)
-                }
+                className="text-gray-400 hover:text-white transition"
+                onClick={() => navigator.clipboard.writeText(`const response = await fetch('/api/projects', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer ' + token,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'New Project',
+    description: 'Project description'
+  })
+});`)}
               >
-                📋
+                <Copy size={16} />
               </button>
             </div>
+            <pre className="whitespace-pre-wrap">
+{`const response = await fetch('/api/projects', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer ' + token,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'New Project',
+    description: 'Project description'
+  })
+});
+
+const project = await response.json();
+console.log('Project created:', project);`}
+            </pre>
           </div>
         </div>
       </section>
 
-      <div className="bg-white py-6 overflow-hidden">
-        <div className="whitespace-nowrap animate-marquee flex items-center gap-16">
-          {[...logos, ...logos].map((logo, index) => (
-            <img
-              key={index}
-              src={logo.src}
-              alt={logo.name}
-              className="h-20  opacity-85 hover:opacity-100 transition"
-            />
-          ))}
+      {/* Logo Carousel */}
+      <section className="bg-white py-12 mb-16">
+        <div className="text-center mb-8">
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">Trusted by teams worldwide</h3>
+          <p className="text-gray-600">Join thousands of companies already using our platform</p>
         </div>
-      </div>
+        <div className="overflow-hidden">
+          <div className="whitespace-nowrap animate-marquee flex items-center gap-16">
+            {[...logos, ...logos].map((logo, index) => (
+              <img
+                key={index}
+                src={logo.src}
+                alt={logo.name}
+                className="h-16 opacity-60 hover:opacity-100 transition grayscale hover:grayscale-0"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       <Testimonals />
-      <footer className="bg-gray-100 text-gray-800 px-6 py-12 w-full">
-        <div className="max-w-7xl mx-auto">
-          {/* Top Call to Action */}
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-2">Ready to try It ?</h2>
-            <p className="text-gray-600">
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, minus.            </p>
-            <button className="mt-6 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-md text-lg font-medium transition">
-              Get Started now →
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white py-20 px-6 mb-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-4">Ready to Transform Your Workflow?</h2>
+          <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+            Join thousands of teams who have already revolutionized their project management process
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <button className="bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2">
+              <Star size={20} />
+              Get Started Free
+            </button>
+            <button className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300">
+              Learn More
             </button>
           </div>
+        </div>
+      </section>
 
-          {/* Links Grid */}
-          <div className="flex flex-col md:flex-row justify-between mt-12 gap-10 text-sm text-gray-600">
-            <div className="flex flex-col gap-4">
-              <h4 className="text-gray-900 font-semibold">PRODUCT</h4>
-     
-              <a href="#">Optimize</a>
-     
-              <a href="#">Pricing</a>
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-300 px-6 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div>
+              <h4 className="text-white font-semibold mb-4">PRODUCT</h4>
+              <div className="space-y-3">
+                <a href="#" className="block hover:text-white transition">Features</a>
+                <a href="#" className="block hover:text-white transition">Pricing</a>
+                <a href="#" className="block hover:text-white transition">Integrations</a>
+              </div>
             </div>
-
-            <div className="flex flex-col gap-4">
-              <h4 className="text-gray-900 font-semibold">RESOURCES</h4>
-              <a href="#">Docs</a>
-
-              <a href="#">Customer stories</a>
+            <div>
+              <h4 className="text-white font-semibold mb-4">RESOURCES</h4>
+              <div className="space-y-3">
+                <a href="#" className="block hover:text-white transition">Documentation</a>
+                <a href="#" className="block hover:text-white transition">API Reference</a>
+                <a href="#" className="block hover:text-white transition">Customer Stories</a>
+              </div>
             </div>
-
-            <div className="flex flex-col gap-4">
-              <h4 className="text-gray-900 font-semibold">CONTACT US</h4>
-              <a href="#">Community</a>
-              <a href="#">Support</a>
-              <a href="#">Enterprise</a>
-              <a href="#">Partners</a>
+            <div>
+              <h4 className="text-white font-semibold mb-4">SUPPORT</h4>
+              <div className="space-y-3">
+                <a href="#" className="block hover:text-white transition">Help Center</a>
+                <a href="#" className="block hover:text-white transition">Community</a>
+                <a href="#" className="block hover:text-white transition">Contact Us</a>
+              </div>
             </div>
-
-            <div className="flex flex-col gap-4">
-              <h4 className="text-gray-900 font-semibold">COMPANY</h4>
-              <a href="#">About</a>
-              <a href="#">Blog</a>
-              <a href="#">Data DX ↗</a>
-              <a href="#">Careers</a>
-              <a href="#">Security & Compliance ↗</a>
-              <a href="#">Legal</a>
+            <div>
+              <h4 className="text-white font-semibold mb-4">COMPANY</h4>
+              <div className="space-y-3">
+                <a href="#" className="block hover:text-white transition">About</a>
+                <a href="#" className="block hover:text-white transition">Blog</a>
+                <a href="#" className="block hover:text-white transition">Careers</a>
+              </div>
             </div>
           </div>
 
-          {/* Social Icons */}
-          <div className="mt-12 flex items-center justify-center gap-6 text-xl text-gray-600">
-            <FaDiscord />
-            <FaXTwitter />
-            <FaYoutube />
-            <FaWhatsapp />
-            <FaGithub />
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-gray-500">
+                © {new Date().getFullYear()} - All rights reserved.
+              </p>
+              <div className="flex items-center gap-6 text-xl">
+                <FaDiscord className="hover:text-white transition cursor-pointer" />
+                <FaXTwitter className="hover:text-white transition cursor-pointer" />
+                <FaYoutube className="hover:text-white transition cursor-pointer" />
+                <FaWhatsapp className="hover:text-white transition cursor-pointer" />
+                <FaGithub className="hover:text-white transition cursor-pointer" />
+              </div>
+            </div>
           </div>
-
-          {/* Copyright */}
-          <p className="mt-8 text-center text-gray-500 text-sm">
-            © {new Date().getFullYear()} – All rights reserved.
-          </p>
         </div>
       </footer>
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center px-4">
-          <div className="bg-white text-black rounded-lg shadow-lg p-8 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">Create New Project</h2>
-            <form onSubmit={createProject}>
-              <input
-                type="text"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
-                placeholder="Enter project name"
-                required
-              />
-              <div className="flex justify-end gap-2">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Create New Project
+            </h2>
+            <form onSubmit={createProject} className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Project Name
+                </label>
+                <input
+                  type="text"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Enter your project name"
+                  required
+                />
+              </div>
+              <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                  className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition font-medium"
                 >
-                  Create
+                  Create Project
                 </button>
               </div>
             </form>

@@ -2,7 +2,7 @@ import userModel from "../models/user.models.js";
 import * as userService from "../services/user.service.js";
 import { validationResult } from "express-validator";
 import redisClient from "../services/redis.service.js";
-// import transporter from "../services/nodemailer.service.js";
+import transporter from "../services/nodemailer.service.js";
 import bcrypt from "bcryptjs";
 
 // one transporter  used in login , reset otp
