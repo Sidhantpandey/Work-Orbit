@@ -6,7 +6,7 @@ A modern, full-stack AI-powered project management and team collaboration platfo
 
 ## Features
 
--  **User Authentication** (coming soon)
+-  **User Authentication** 
 -  **AI-assisted Group Chats**
 -  **Create and Join Groups**
 -  **Real-time Messaging (WebSocket-based)**
@@ -20,19 +20,19 @@ A modern, full-stack AI-powered project management and team collaboration platfo
 ##  Tech Stack
 
 ### Frontend
-- ⚛️React
-- 💨 Tailwind CSS
-- ⚡ Vite
-- 🔥 Context API
+- React
+- Tailwind CSS
+- Vite
+- Context API
 
 ### Backend
-- 🟧 Node.js
-- 🚂 Express.js
+- Node.js
+- Express.js
 
 ### Dev Tools
-- 🧪 ESLint + Prettier
-- 🐶 Husky + lint-staged
-- 🐙 Git
+- ESLint + Prettier
+- Husky + lint-staged
+- Git
 
 ---
 
