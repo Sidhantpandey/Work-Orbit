@@ -68,5 +68,9 @@ Start the Backend server
 ```bash
 npm run start
 ```
+<img width="1507" height="840" alt="S1" src="https://github.com/user-attachments/assets/063dc2ca-3c96-488a-9ec5-086e04ab07be" />
+<img width="1918" height="970" alt="S2" src="https://github.com/user-attachments/assets/707517d6-2a1b-4a9b-923b-2925dc7a2ff0" />
+<img width="1918" height="971" alt="S3" src="https://github.com/user-attachments/assets/b6f82c27-f762-492d-b962-41a525e6eba1" />
+<img width="1918" height="972" alt="S4" src="https://github.com/user-attachments/assets/e70c3c74-a76e-45d0-848e-846e1d98f9ea" />
 
 
