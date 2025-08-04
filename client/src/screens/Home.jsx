@@ -4,8 +4,26 @@ import axios from "../config/axios.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "../components/Loader/Loader.css";
-import Navbar from "./Navbar.jsx";
-import { Zap, Code, Users, Star, ArrowRight, Copy } from "lucide-react";
+import {
+  Zap,
+  Code,
+  Users,
+  Star,
+  ArrowRight,
+  Copy,
+  Brain,
+  Sparkles,
+  Bot,
+  Cpu,
+  Network,
+  Rocket,
+  Shield,
+  Globe,
+  Settings,
+  LogOut,
+  User,
+  Plus,
+} from "lucide-react";
 import {
   FaDiscord,
   FaGithub,
@@ -13,7 +31,6 @@ import {
   FaWhatsapp,
   FaXTwitter,
 } from "react-icons/fa6";
-import Testimonals from "./Testimonals.jsx";
 
 const logos = [
   {
@@ -45,7 +62,7 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
 
-  const fullText = "Create Amazing Projects ";
+  const fullText = "AI-Powered Project Intelligence ";
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [index, setIndex] = useState(0);
@@ -110,73 +127,155 @@ const Home = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
-      <Navbar />
+    <main className="min-h-screen bg-gradient-to-br from-gray-950  to-black text-white overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+      </div>
+
+      {/* Top Navigation Bar */}
+      <div className="relative z-10 flex justify-between items-center p-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl flex items-center justify-center">
+            <Brain size={24} className="text-white" />
+          </div>
+          <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            AI Studio
+          </span>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => navigate("/update")}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg hover:bg-gray-700/50 transition-all duration-300"
+          >
+            <User size={16} />
+            <span className="hidden sm:inline">
+              {user?.name?.split(" ")[0]}
+            </span>
+          </button>
+          <button
+            onClick={logout}
+            className="flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-lg hover:bg-red-500/30 transition-all duration-300"
+          >
+            <LogOut size={16} />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
+        </div>
+      </div>
 
       {/* Hero Section */}
-      <section className="max-w-6xl mx-auto px-6 pt-20 pb-16">
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-xl border border-white/20">
-          <div className="text-center">
-            <div className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
-              Welcome back, {user?.name?.split(" ")[0]}! 👋
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-6 h-20">
-              {displayText}
-              <span className="border-r-2 border-purple-500 animate-pulse ml-1" />
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Build, collaborate, and innovate with your team using our powerful project management platform.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold flex items-center justify-center gap-2"
-              >
-                <Zap size={20} />
-                Create New Project
-              </button>
-              <button
-                onClick={() => navigate("/update")}
-                className="bg-white/50 backdrop-blur-sm border-2 border-purple-300 text-purple-700 px-8 py-4 rounded-xl hover:bg-white/80 transition-all duration-300 font-semibold"
-              >
-                Update Profile
-              </button>
-              <button
-                onClick={logout}
-                className="bg-white/50 backdrop-blur-sm border-2 border-red-300 text-red-600 px-8 py-4 rounded-xl hover:bg-white/80 transition-all duration-300 font-semibold"
-              >
-                Logout
-              </button>
-            </div>
+      <section className="relative z-10 max-w-7xl mx-auto px-6 pt-12 pb-20">
+        <div className="text-center">
+          {/* AI Badge */}
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 backdrop-blur-sm border border-purple-500/30 px-6 py-3 rounded-full mb-8">
+            <Sparkles size={20} className="text-purple-400 animate-pulse" />
+            <span className="text-purple-300 font-medium">
+              Powered by Advanced AI
+            </span>
+            <Bot size={20} className="text-cyan-400 animate-bounce" />
           </div>
+
+          {/* Main Heading */}
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 h-24 relative">
+            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-glow">
+              {displayText}
+            </span>
+            <span className="border-r-2 border-cyan-300 animate-pulse ml-1 h-full inline-block align-middle" />
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-xl md:text-2xl text-gray-300 mb-4 max-w-4xl mx-auto leading-relaxed">
+            Welcome back,{" "}
+            <span className="text-purple-400 font-semibold">
+              {user?.name?.split(" ")[0]}
+            </span>
+            ! Transform your ideas into reality with our intelligent project
+            management platform.
+          </p>
+
+          <p className="text-gray-400 mb-12 max-w-2xl mx-auto">
+            Harness the power of artificial intelligence to streamline
+            workflows, predict outcomes, and accelerate innovation.
+          </p>
+
+          {/* CTA Button */}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
+          >
+            <Plus size={24} />
+            Create AI Project
+            <Rocket
+              size={20}
+              className="group-hover:translate-x-1 transition-transform"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity -z-10"></div>
+          </button>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="max-w-6xl mx-auto px-6 mb-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg">
-            <div className="text-3xl font-bold mb-2">{projects.length}</div>
-            <div className="text-purple-100">Active Projects</div>
+      {/* AI Stats Section */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 backdrop-blur-sm border border-purple-500/30 p-6 rounded-2xl">
+            <div className="flex items-center gap-3 mb-3">
+              <Cpu size={24} className="text-purple-400" />
+              <span className="text-purple-300 font-medium">
+                Active Projects
+              </span>
+            </div>
+            <div className="text-3xl font-bold text-white">
+              {projects.length}
+            </div>
+            <div className="text-purple-200 text-sm">AI-Enhanced</div>
           </div>
-          <div className="bg-gradient-to-br from-pink-500 to-pink-600 text-white p-6 rounded-2xl shadow-lg">
-            <div className="text-3xl font-bold mb-2">
+
+          <div className="bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 backdrop-blur-sm border border-cyan-500/30 p-6 rounded-2xl">
+            <div className="flex items-center gap-3 mb-3">
+              <Network size={24} className="text-cyan-400" />
+              <span className="text-cyan-300 font-medium">Team Members</span>
+            </div>
+            <div className="text-3xl font-bold text-white">
               {projects.reduce((acc, project) => acc + project.users.length, 0)}
             </div>
-            <div className="text-pink-100">Team Members</div>
+            <div className="text-cyan-200 text-sm">Connected</div>
           </div>
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-2xl shadow-lg">
-            <div className="text-3xl font-bold mb-2">98%</div>
-            <div className="text-blue-100">Success Rate</div>
+
+          <div className="bg-gradient-to-br from-green-500/20 to-green-600/20 backdrop-blur-sm border border-green-500/30 p-6 rounded-2xl">
+            <div className="flex items-center gap-3 mb-3">
+              <Brain size={24} className="text-green-400" />
+              <span className="text-green-300 font-medium">AI Accuracy</span>
+            </div>
+            <div className="text-3xl font-bold text-white">98.7%</div>
+            <div className="text-green-200 text-sm">Prediction Rate</div>
+          </div>
+
+          <div className="bg-gradient-to-br from-pink-500/20 to-pink-600/20 backdrop-blur-sm border border-pink-500/30 p-6 rounded-2xl">
+            <div className="flex items-center gap-3 mb-3">
+              <Zap size={24} className="text-pink-400" />
+              <span className="text-pink-300 font-medium">Automation</span>
+            </div>
+            <div className="text-3xl font-bold text-white">2.4x</div>
+            <div className="text-pink-200 text-sm">Faster Delivery</div>
           </div>
         </div>
       </section>
 
       {/* Projects Grid */}
-      <section className="max-w-6xl mx-auto px-6 mb-20">
-        <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-          Your Projects
-        </h2>
+      <section className="relative z-10 max-w-7xl mx-auto px-6 mb-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Your AI-Powered Projects
+            </span>
+          </h2>
+          <p className="text-gray-400">
+            Intelligent project management with predictive analytics
+          </p>
+        </div>
+
         {loading ? (
           <div className="flex justify-center">
             <div className="loader"></div>
@@ -187,24 +286,44 @@ const Home = () => {
               <div
                 key={project._id}
                 onClick={() => navigate("/project", { state: { project } })}
-                className={`cursor-pointer p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 ${
+                className={`group cursor-pointer p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl ${
                   index % 3 === 0
-                    ? "bg-gradient-to-br from-purple-400 to-purple-500"
+                    ? "bg-gradient-to-br from-purple-500/20 to-purple-600/20 border-purple-500/30 hover:shadow-purple-500/25"
                     : index % 3 === 1
-                    ? "bg-gradient-to-br from-pink-400 to-pink-500"
-                    : "bg-gradient-to-br from-blue-400 to-blue-500"
-                } text-white`}
+                      ? "bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 border-cyan-500/30 hover:shadow-cyan-500/25"
+                      : "bg-gradient-to-br from-pink-500/20 to-pink-600/20 border-pink-500/30 hover:shadow-pink-500/25"
+                }`}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <Code size={24} />
+                  <div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                      index % 3 === 0
+                        ? "bg-purple-500/30"
+                        : index % 3 === 1
+                          ? "bg-cyan-500/30"
+                          : "bg-pink-500/30"
+                    }`}
+                  >
+                    <Bot size={24} className="text-white" />
                   </div>
-                  <ArrowRight size={20} className="opacity-70" />
+                  <ArrowRight
+                    size={20}
+                    className="text-gray-400 group-hover:translate-x-1 transition-transform"
+                  />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
-                <div className="flex items-center gap-2 opacity-80">
+
+                <h3 className="text-xl font-semibold mb-2 text-white">
+                  {project.name.charAt(0).toUpperCase() + project.name.slice(1)}
+                </h3>
+
+                <div className="flex items-center gap-2 text-gray-300 mb-3">
                   <Users size={16} />
                   <span>{project.users.length} collaborators</span>
+                </div>
+
+                <div className="flex items-center gap-2 text-sm">
+                  <Sparkles size={14} className="text-yellow-400" />
+                  <span className="text-gray-400">AI-Enhanced</span>
                 </div>
               </div>
             ))}
@@ -212,136 +331,208 @@ const Home = () => {
         )}
       </section>
 
-      {/* Feature Section 1 */}
-      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-20 px-6 mb-16">
-        <div className="max-w-6xl mx-auto">
+      {/* AI Features Section */}
+      <section className="relative z-10 bg-gradient-to-br from-gray-950  to-black backdrop-blur-sm py-20 mb-20">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              Powerful Features for Modern Teams
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                Next-Generation AI Features
+              </span>
             </h2>
-            <p className="text-xl text-purple-100 max-w-2xl mx-auto">
-              Everything you need to manage projects efficiently and collaborate seamlessly
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Experience the future of project management with our advanced
+              artificial intelligence capabilities
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-bold mb-4">Real-time Collaboration</h3>
-              <p className="text-purple-100 mb-6">
-                Work together in real-time with your team members. See changes instantly and never lose track of progress.
-              </p>
-              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 bg-green-400 rounded-full"></div>
-                  <span>John Doe is editing...</span>
+            <div className="space-y-8">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Brain size={24} className="text-white" />
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-400 rounded-full"></div>
-                  <span>Sarah Chen joined the project</span>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2 text-white">
+                    Predictive Analytics
+                  </h3>
+                  <p className="text-gray-400">
+                    AI analyzes patterns to predict project outcomes, identify
+                    risks, and suggest optimizations before issues arise.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Zap size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2 text-white">
+                    Smart Automation
+                  </h3>
+                  <p className="text-gray-400">
+                    Intelligent workflows that adapt and optimize themselves,
+                    reducing manual work by up to 70%.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Sparkles size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2 text-white">
+                    Intelligent Insights
+                  </h3>
+                  <p className="text-gray-400">
+                    Real-time AI-powered recommendations and insights to keep
+                    your projects on track and ahead of schedule.
+                  </p>
                 </div>
               </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl">
+
+            {/* AI Dashboard Mockup */}
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 p-8 rounded-2xl">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="text-sm text-gray-400">AI Dashboard</div>
+              </div>
+
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span>Project Progress</span>
-                  <span className="text-green-300">87%</span>
-                </div>
-                <div className="w-full bg-white/20 rounded-full h-3">
-                  <div className="bg-gradient-to-r from-green-400 to-blue-400 h-3 rounded-full w-[87%]"></div>
-                </div>
-                <div className="grid grid-cols-2 gap-4 mt-6">
-                  <div className="bg-white/10 p-4 rounded-xl text-center">
-                    <div className="text-2xl font-bold">24</div>
-                    <div className="text-sm opacity-80">Tasks Done</div>
+                <div className="flex items-center justify-between p-3 bg-purple-500/20 rounded-lg border border-purple-500/30">
+                  <div className="flex items-center gap-3">
+                    <Brain size={16} className="text-purple-400" />
+                    <span className="text-white text-sm">
+                      Project Success Probability
+                    </span>
                   </div>
-                  <div className="bg-white/10 p-4 rounded-xl text-center">
-                    <div className="text-2xl font-bold">4</div>
-                    <div className="text-sm opacity-80">Pending</div>
-                  </div>
+                  <span className="text-green-400 font-semibold">94%</span>
                 </div>
+
+                <div className="flex items-center justify-between p-3 bg-cyan-500/20 rounded-lg border border-cyan-500/30">
+                  <div className="flex items-center gap-3">
+                    <Zap size={16} className="text-cyan-400" />
+                    <span className="text-white text-sm">
+                      Automation Active
+                    </span>
+                  </div>
+                  <span className="text-cyan-400 font-semibold">12 Tasks</span>
+                </div>
+
+                <div className="flex items-center justify-between p-3 bg-pink-500/20 rounded-lg border border-pink-500/30">
+                  <div className="flex items-center gap-3">
+                    <Sparkles size={16} className="text-pink-400" />
+                    <span className="text-white text-sm">
+                      AI Recommendations
+                    </span>
+                  </div>
+                  <span className="text-pink-400 font-semibold">3 New</span>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 rounded-lg border border-gray-600">
+                <div className="flex items-center gap-2 mb-2">
+                  <Bot size={16} className="text-purple-400" />
+                  <span className="text-purple-300 text-sm font-medium">
+                    AI Assistant
+                  </span>
+                </div>
+                <p className="text-gray-300 text-sm">
+                  "Based on current progress, I recommend allocating 2 more
+                  developers to the frontend module to meet the deadline."
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Code Section */}
-      <section className="max-w-6xl mx-auto px-6 mb-16">
+      {/* Code Integration Section */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
-              Developer Friendly
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Built for Developers, by Developers
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Integrate seamlessly with your existing workflow. Use our powerful API and webhooks to automate your processes.
-            </p>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>RESTful API with comprehensive documentation</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Webhook support for real-time updates</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>SDK available in multiple languages</span>
-              </li>
-            </ul>
-          </div>
-          <div className="bg-gray-900 text-green-400 p-6 rounded-2xl font-mono text-sm overflow-hidden">
+          <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-700 p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               </div>
-              <button
-                className="text-gray-400 hover:text-white transition"
-                onClick={() => navigator.clipboard.writeText(`const response = await fetch('/api/projects', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer ' + token,
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    name: 'New Project',
-    description: 'Project description'
-  })
-});`)}
-              >
-                <Copy size={16} />
-              </button>
+              <div className="flex items-center gap-2">
+                <Code size={16} className="text-gray-400" />
+                <span className="text-gray-400 text-sm">AI Integration</span>
+              </div>
             </div>
-            <pre className="whitespace-pre-wrap">
-{`const response = await fetch('/api/projects', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer ' + token,
-    'Content-Type': 'application/json'
+            <pre className="text-green-400 text-sm font-mono overflow-x-auto">
+              {`// AI-Powered Project Creation
+const aiProject = await createProject({
+  name: "Smart Analytics Dashboard",
+  aiFeatures: {
+    predictiveAnalytics: true,
+    smartAutomation: true,
+    intelligentInsights: true
   },
-  body: JSON.stringify({
-    name: 'New Project',
-    description: 'Project description'
-  })
+  team: await ai.suggestOptimalTeam(),
+  timeline: ai.predictDeliveryDate()
 });
 
-const project = await response.json();
-console.log('Project created:', project);`}
+// AI automatically optimizes workflow
+ai.optimizeWorkflow(aiProject.id);
+console.log("🤖 AI optimization complete!");`}
             </pre>
+          </div>
+
+          <div>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 backdrop-blur-sm border border-purple-500/30 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Bot size={16} className="text-purple-400" />
+              <span className="text-purple-300">AI-First Development</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Built for the AI Era
+            </h2>
+            <p className="text-gray-300 mb-6 text-lg">
+              Seamlessly integrate artificial intelligence into your development
+              workflow with our comprehensive API and SDK.
+            </p>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className="text-gray-300">
+                  AI-powered code generation and optimization
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
+                <span className="text-gray-300">
+                  Intelligent testing and quality assurance
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                <span className="text-gray-300">
+                  Automated deployment and scaling
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* Logo Carousel */}
-      <section className="bg-white py-12 mb-16">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Trusted by teams worldwide</h3>
-          <p className="text-gray-600">Join thousands of companies already using our platform</p>
+      {/* Trusted Companies */}
+      <section className="relative z-10 py-16 mb-20">
+        <div className="text-center mb-12">
+          <h3 className="text-2xl font-bold text-white mb-2">
+            Trusted by AI-Forward Companies
+          </h3>
+          <p className="text-gray-400">
+            Join the leaders in AI-powered project management
+          </p>
         </div>
         <div className="overflow-hidden">
           <div className="whitespace-nowrap animate-marquee flex items-center gap-16">
@@ -350,107 +541,74 @@ console.log('Project created:', project);`}
                 key={index}
                 src={logo.src}
                 alt={logo.name}
-                className="h-16 opacity-60 hover:opacity-100 transition grayscale hover:grayscale-0"
+                className="h-12 opacity-40 hover:opacity-70 transition grayscale hover:grayscale-0"
               />
             ))}
           </div>
         </div>
       </section>
 
-      <Testimonals />
-
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white py-20 px-6 mb-16">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">Ready to Transform Your Workflow?</h2>
-          <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of teams who have already revolutionized their project management process
+      {/* Final CTA */}
+      <section className="relative z-10 bg-gradient-to-br from-gray-950  to-black backdrop-blur-sm py-20 mb-20">
+        <div className="max-w-4xl mx-auto text-center px-6">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 backdrop-blur-sm border border-purple-500/30 px-6 py-3 rounded-full mb-8">
+            <Rocket size={20} className="text-purple-400" />
+            <span className="text-purple-300 font-medium">
+              Ready to Launch?
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Transform Your Projects with AI
+            </span>
+          </h2>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Experience the future of project management. Let artificial
+            intelligence accelerate your success.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
+            >
               <Star size={20} />
-              Get Started Free
+              Start AI Project
+              <ArrowRight
+                size={20}
+                className="group-hover:translate-x-1 transition-transform"
+              />
             </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300">
-              Learn More
+            <button className="inline-flex items-center gap-3 bg-gray-800/50 backdrop-blur-sm border border-gray-600 hover:border-gray-500 px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300">
+              <Globe size={20} />
+              Explore Features
             </button>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <h4 className="text-white font-semibold mb-4">PRODUCT</h4>
-              <div className="space-y-3">
-                <a href="#" className="block hover:text-white transition">Features</a>
-                <a href="#" className="block hover:text-white transition">Pricing</a>
-                <a href="#" className="block hover:text-white transition">Integrations</a>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">RESOURCES</h4>
-              <div className="space-y-3">
-                <a href="#" className="block hover:text-white transition">Documentation</a>
-                <a href="#" className="block hover:text-white transition">API Reference</a>
-                <a href="#" className="block hover:text-white transition">Customer Stories</a>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">SUPPORT</h4>
-              <div className="space-y-3">
-                <a href="#" className="block hover:text-white transition">Help Center</a>
-                <a href="#" className="block hover:text-white transition">Community</a>
-                <a href="#" className="block hover:text-white transition">Contact Us</a>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">COMPANY</h4>
-              <div className="space-y-3">
-                <a href="#" className="block hover:text-white transition">About</a>
-                <a href="#" className="block hover:text-white transition">Blog</a>
-                <a href="#" className="block hover:text-white transition">Careers</a>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-gray-500">
-                © {new Date().getFullYear()} - All rights reserved.
-              </p>
-              <div className="flex items-center gap-6 text-xl">
-                <FaDiscord className="hover:text-white transition cursor-pointer" />
-                <FaXTwitter className="hover:text-white transition cursor-pointer" />
-                <FaYoutube className="hover:text-white transition cursor-pointer" />
-                <FaWhatsapp className="hover:text-white transition cursor-pointer" />
-                <FaGithub className="hover:text-white transition cursor-pointer" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
-
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Create New Project
-            </h2>
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-4">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                <Brain size={20} className="text-white" />
+              </div>
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                Create AI Project
+              </h2>
+            </div>
             <form onSubmit={createProject} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Project Name
                 </label>
                 <input
                   type="text"
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="Enter your project name"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400"
+                  placeholder="Enter your AI project name"
                   required
                 />
               </div>
@@ -458,13 +616,13 @@ console.log('Project created:', project);`}
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-medium"
+                  className="flex-1 px-4 py-3 bg-gray-700/50 border border-gray-600 text-gray-300 rounded-xl hover:bg-gray-600/50 transition font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition font-medium"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-500 to-cyan-500 text-white rounded-xl hover:from-purple-600 hover:to-cyan-600 transition font-medium"
                 >
                   Create Project
                 </button>

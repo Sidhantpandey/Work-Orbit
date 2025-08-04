@@ -10,6 +10,8 @@ import {
 } from "../config/socket";
 import { UserContext } from "../context/user.context.jsx";
 import Markdown from "markdown-to-jsx";
+import { extractCodeBlocks, removeCodeBlocks, hasCodeBlocks } from "../utils/codeExtractor";
+import CodeExecutor from "../components/CodeExecutor";
 
 const Project = () => {
   const [showProfile, setShowProfile] = useState(false);
@@ -18,6 +20,7 @@ const Project = () => {
   const [project, setProject] = useState({});
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [codeBlocks, setCodeBlocks] = useState([]);
   const { user } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const messageBox = useRef();
@@ -43,17 +46,44 @@ const Project = () => {
     appendOutgoingMessage(outgoingMessage);
     setMessage("");
   };
+
   function appendIncomingMessage(data) {
-    setMessages((prev) => [...prev, { ...data, type: "incoming" }]);
+    const messageData = { ...data, type: "incoming" };
+    
+    // If it's an AI message, check for code blocks
+    if (data.sender._id === "ai" && hasCodeBlocks(data.message)) {
+      const blocks = extractCodeBlocks(data.message);
+      const textWithoutCode = removeCodeBlocks(data.message);
+      
+      messageData.message = textWithoutCode;
+      messageData.codeBlocks = blocks;
+      
+      // Update code blocks state for right panel
+      setCodeBlocks(prev => [...prev, ...blocks.map((block, index) => ({
+        ...block,
+        id: `${Date.now()}-${index}`,
+        messageId: `${data.sender._id}-${Date.now()}`
+      }))]);
+    }
+    
+    setMessages((prev) => [...prev, messageData]);
     scrollToBottom();
   }
-  
 
   const appendOutgoingMessage = (data) => {
     setMessages((prev) => [...prev, { ...data, type: "outgoing" }]);
     scrollToBottom();
   };
 
+  const handleExecutionResult = (result) => {
+    const resultMessage = {
+      sender: { _id: "system", email: "System" },
+      message: result,
+      type: "incoming"
+    };
+    setMessages((prev) => [...prev, resultMessage]);
+    scrollToBottom();
+  };
   const scrollToBottom = () => {
     if (messageBox.current) {
       messageBox.current.scrollTop = messageBox.current.scrollHeight;
@@ -70,7 +100,6 @@ const Project = () => {
   
         socketInitialize(res.data._id); // Initialize socket for this project
   
-        // Unsubscribe is a function returned by receiveMessage to remove the listener
         unsubscribeFn = receiveMessage("project-message", (data) => {
           appendIncomingMessage(data);
         });
@@ -116,8 +145,8 @@ const Project = () => {
   return (
     <main className="h-screen w-screen flex">
       {/* Chat + Sidebar */}
-      <section className="left relative flex flex-col h-screen min-w-72 bg-slate-300">
-        <header className="flex justify-between p-4 px-4 w-full bg-slate-100 absolute z-20 top-0">
+      <section className="left relative overflow-auto flex flex-col h-screen w-1/2 bg-slate-300">
+        <header className="flex sticky top-0 justify-between p-4 px-4 w-full bg-slate-100 absolute z-20 top-0">
           <button
             className="flex gap-2"
             onClick={() => setIsModalOpen(true)}
@@ -136,29 +165,43 @@ const Project = () => {
             ref={messageBox}
             className="overflow-auto mb-4 max-h-full message-area p-1 flex-grow flex flex-col gap-2"
           >
-           {messages.map((msg, index) => {
-  const isOutgoing = msg.sender?.email === user.email;
+            {messages.map((msg, index) => {
+              const isOutgoing = msg.sender?.email === user.email;
+              const isSystem = msg.sender?._id === "system";
 
-  return (
-    <div
-      key={index}
-      className={`${
-        isOutgoing ? "ml-auto bg-slate-100" : "mr-auto bg-slate-100"
-      } flex flex-col w-fit max-w-80 p-2 rounded-md`}
-    >
-      <small className="opacity-65 text-xs">{msg.sender?.email}</small>
-      <div className="text-sm">
-        {msg.sender._id === "ai" ? (
-          <div className="overflow-auto bg-blue-950 rounded-sm p-2 text-white max-w-96">
-            <Markdown>{msg.message}</Markdown>
-          </div>
-        ) : (
-          msg.message
-        )}
-      </div>
-    </div>
-  );
-})}
+              return (
+                <div
+                  key={index}
+                  className={`${
+                    isOutgoing 
+                      ? "ml-auto bg-slate-100" 
+                      : isSystem
+                      ? "mr-auto bg-yellow-100 border-l-4 border-yellow-500"
+                      : "mr-auto bg-slate-100"
+                  } flex flex-col w-fit max-w-80 p-2 rounded-md`}
+                >
+                  <small className="opacity-65 text-xs">{msg.sender?.email}</small>
+                  <div className="text-sm">
+                    {msg.sender._id === "ai" ? (
+                      <div className="overflow-auto bg-blue-950 rounded-sm p-2 text-white max-w-96">
+                        <Markdown>{msg.message}</Markdown>
+                        {msg.codeBlocks && msg.codeBlocks.length > 0 && (
+                          <div className="mt-2 text-xs text-blue-300">
+                            📝 Code blocks available in the code panel →
+                          </div>
+                        )}
+                      </div>
+                    ) : isSystem ? (
+                      <div className="font-mono text-xs whitespace-pre-wrap">
+                        {msg.message}
+                      </div>
+                    ) : (
+                      msg.message
+                    )}
+                  </div>
+                </div>
+              );
+            })}
 
           </div>
 
@@ -166,6 +209,7 @@ const Project = () => {
             <input
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && send()}
               className="p-2 px-4 flex-grow border-none outline-none"
               type="text"
               placeholder="Enter the message"
@@ -215,6 +259,47 @@ const Project = () => {
         </AnimatePresence>
       </section>
 
+      {/* Code Execution Panel */}
+      <section className="right w-1/2 bg-gray-100 flex flex-col">
+        <header className="bg-gray-800 text-white p-4">
+          <div className="flex items-center gap-2">
+            <i className="ri-code-s-slash-line"></i>
+            <h2 className="text-lg font-semibold">Code Execution</h2>
+          </div>
+        </header>
+        
+        <div className="flex-grow overflow-auto p-4 space-y-4">
+          {codeBlocks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+              <i className="ri-code-s-slash-line text-6xl mb-4"></i>
+              <p className="text-lg">No code blocks yet</p>
+              <p className="text-sm">Ask AI to generate some code and it will appear here</p>
+            </div>
+          ) : (
+            codeBlocks.map((block) => (
+              <div key={block.id} className="mb-4">
+                <CodeExecutor
+                  code={block.code}
+                  language={block.language}
+                  onExecutionResult={handleExecutionResult}
+                />
+              </div>
+            ))
+          )}
+        </div>
+        
+        {codeBlocks.length > 0 && (
+          <div className="bg-gray-200 p-3 border-t">
+            <button
+              onClick={() => setCodeBlocks([])}
+              className="text-sm text-gray-600 hover:text-red-600 transition flex items-center gap-1"
+            >
+              <i className="ri-delete-bin-line"></i>
+              Clear all code blocks
+            </button>
+          </div>
+        )}
+      </section>
       {/* Add Collaborator Modal */}
       <AnimatePresence>
         {isModalOpen && (
